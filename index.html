@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
         <meta charset="utf-8">
+        
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="assets/css/normalize.css">
         <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -60,12 +61,6 @@
                                 </a>
                             </p>
                             <ul class="social-media-links">
-                                
-                                <li>
-                                    <a href="https://twitter.com/aothms" target="_blank" class="btn btn-primary">
-                                        <i class="icofont-twitter"></i>
-                                    </a>
-                                </li>
                                 
                                 <li class="github-icon">
                                     <a href="https://github.com/ifcopenshell/ifcopenshell" target="_blank" class="">Github Icon</a>
@@ -140,7 +135,7 @@
                             <div class="banner-btn">
                                 <a href="downloads.html" class="main-btn wow fadeInUp delay-0-8s">
                                     <span class="btn-style">
-                                        <img src="assets/images/banner/download-icon.png" /> Download 0.8.5
+                                        <img src="assets/images/banner/download-icon.png" /> Download 0.9.0
                                     </span>
                                 </a>
                             </div>
@@ -181,7 +176,7 @@
                                 </h3>
                                 <span class="divider"></span>
                                 <p>
-                                    Build with Windows, Mac, or Linux, in C++ or Python. Deploy headless server tools, or author IFC natively with a rich graphical interface.
+                                    Build with Windows, Mac, Linux, or Web, in C++, Python, or TypeScript. Deploy headless server tools, or author IFC natively with a rich graphical interface.
                                 </p>
                             </div>
                             <img src="assets/images/icon/icon-2.png" alt="Icon" style="width: 70%;" />
@@ -195,7 +190,7 @@
                                 </h3>
                                 <span class="divider"></span>
                                 <p>
-                                    Support IFC2X3, IFC4, IFC4X3, or load your own at run-time. Read and write IFC-SPF, IFCJSON, IFCXML, IFCHDF5, and IFCSQL.
+                                    Support IFC2X3, IFC4, IFC4X3, or load your own at run-time. Read and write IFC-SPF, IFCJSON, IFCXML, IFCHDF5, IFCRDB, and IFCSQL.
                                 </p>
                             </div>
                             <img src="assets/images/icon/icon-3.png" alt="Icon" class="left-image" />
@@ -281,141 +276,441 @@
             <div class="row">
                 <h3> Let's get started </h3> 
             </div>
-            <div id="tabs">
-            <div class="row">
-                <div class="col-lg-6 col-md-12">
-                    <div class="home-page-slider-section">
-                        <div class="design-1"></div>
-                        <div class="design-2"></div>
-                        <div class="tabContent">
-                            <div class="owl-carousel owl-theme " >
-                                <div class="item" >
-<pre>
-<span class="orange-color"># Load and edit a wall name</span>
-import <span class="green-color">ifcopenshell</span>
 
-model = ifcopenshell.<span class="green-color">open</span>('model.ifc')
-walls = model.<span class="green-color">by_type</span>('IfcWall')
-walls[0].Name = 'My wall'
-
-model.<span class="green-color">write</span>('updated-model.ifc')
-</pre>
-                                </div>
-                                <div class="item" >
-<pre>
-<span class="orange-color"># Properties, type, and location of a door</span>
-import <span class="green-color">ifcopenshell.util.element</span> as <span class="green-color">util</span>
-
-door = model.<span class="green-color">by_type</span>("IfcDoor")[0]
-
-prop_sets = util.<span class="green-color">get_psets</span>(door)
-door_type = util.<span class="green-color">get_type</span>(door)
-location = util.<span class="green-color">get_container</span>(door)
-</pre>
-                                </div>
-                                <div class="item" >
-<pre>
-<span class="orange-color"># Create a wall on the site</span>
-import <span class="green-color">ifcopenshell.api.root</span>
-import <span class="green-color">ifcopenshell.api.spatial</span>
-
-site = <span class="green-color">ifcopenshell.api.root.create_entity</span>(
-    model, ifc_class="IfcSite")
-wall = <span class="green-color">ifcopenshell.api.root.create_entity</span>(
-    model, ifc_class="IfcWall")
-
-<span class="green-color">ifcopenshell.api.spatial.assign_container</span>(
-    model, relating_structure=site, products=[wall])
-</pre>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tabContent">
-                            <div class="owl-carousel owl-theme">
-                                <div class="item" >
-<pre>
-// C++ example 1
-</pre>
-                                </div>
-                                <div class="item" >
-<pre>
-// C++ example 2
-</pre>
-                                </div>
-                                <div class="item" >
-<pre>
-// C++ example 3
-</pre>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tabContent">
-                            <div class="owl-carousel owl-theme">
-                                <div class="item" >
-<pre>
-<span class="orange-color"># Convert a model to different formats</span>
-$ <span class="green-color">IfcConvert</span> model.ifc model.glb
-
-<span class="orange-color"># Multicore processing</span>
-$ <span class="green-color">IfcConvert</span> model.ifc model.dae
-
-<span class="orange-color"># Filters and operations</span>
-$ <span class="green-color">IfcConvert</span> --model-offset "10000;10000;0" \
-    model.ifc model.dae
-</pre>
-                                </div>
-                                <div class="item" >
-<pre>
-<span class="orange-color"># Check BIM requirements</span>
-$ <span class="green-color">ifctester</span> specs.ids model.ifc
-
-<span class="orange-color"># Produce reports</span>
-$ <span class="green-color">ifctester</span> -r Html -o out.html test.ids bldg.ifc
-</pre>
-                                </div>
-                                <div class="item" >
-<pre>
-<span class="orange-color"># Compare models</span>
-$ <span class="green-color">ifcdiff</span> old.ifc new.ifc
-
-<span class="orange-color"># Schedule objects in a spreadsheet</span>
-$ <span class="green-color">ifccsv</span> -i input.ifc -c out.csv -q ".IfcWall"
-
-<span class="orange-color"># Clash detection</span>
-$ <span class="green-color">ifcclash</span> -o results.json clashsets.json
-</pre>
-                                </div>
-                            </div>
-                        </div>
+            <div class="code-playground" id="code-playground">
+                <div class="cp-langbar" role="tablist" aria-label="Choose a language">
+                    <button class="cp-lang active" type="button" data-lang="python">Python</button>
+                    <button class="cp-lang" type="button" data-lang="cpp">C++</button>
+                    <button class="cp-lang" type="button" data-lang="javascript">JavaScript</button>
+                    <button class="cp-lang" type="button" data-lang="cli">CLI</button>
+                </div>
+                <div class="cp-examples" aria-label="Choose an example"></div>
+                <div class="cp-window">
+                    <div class="cp-titlebar">
+                        <span class="cp-dots"><i></i><i></i><i></i></span>
+                        <span class="cp-filename">example.py</span>
+                        <button class="cp-copy" type="button"><span class="cp-copy-label">Copy</span></button>
+                    </div>
+                    <pre class="cp-code"><code></code></pre>
+                    <div class="cp-runbar">
+                        <button class="cp-run" type="button"><span class="cp-run-icon">&#9654;</span> Run</button>
+                        <span class="cp-hint">Results are simulated for illustration</span>
+                    </div>
+                    <div class="cp-console" hidden>
+                        <div class="cp-console-head"><span>Output</span><button class="cp-console-close" type="button" aria-label="Close output">&times;</button></div>
+                        <pre class="cp-console-body"></pre>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-12">
-                      <div class="tcenter wow fadeInUp delay-0-2s ">
-                        <h4> Choose your hammer </h4>
-                            <ul class="choose-list">
-                                <li>
-                                    <a class="tab whiteborder">
-                                        I know Python
-                                    </a>
-                                </li>
-                                <li>
-                                     <a class="tab">
-                                        I know C++
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="tab">
-                                        I'm a CLI whiz
-                                    </a>
-                                </li>
-                            </ul>
-                            <p>
-                                Learn more in our <a href="https://docs.ifcopenshell.org"><span>documentation</span>.</a>
-                            </p>
-                    </div>
-                </div>
+                <p class="cp-docs">Learn more in our <a href="https://docs.ifcopenshell.org"><span>documentation</span></a>.</p>
             </div>
-            </div> 
+
+<style>
+.code-playground{max-width:880px;margin:0 auto;padding:0 15px;}
+.cp-langbar{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:22px;}
+.cp-lang{font-family:"Nunito",sans-serif;font-size:16px;font-weight:700;color:#2e3436;background:#fff;border:1px solid #74c77b;border-radius:8px;padding:9px 24px;cursor:pointer;transition:all .2s ease;}
+.cp-lang:hover{border-color:#f0855e;color:#f0855e;}
+.cp-lang.active{background:#40b74c;border-color:#40b74c;color:#fff;box-shadow:0 6px 16px rgba(64,183,76,.28);}
+.cp-examples{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:18px;}
+.cp-chip{font-family:"Nunito",sans-serif;font-size:14px;font-weight:600;color:#5a6b60;background:transparent;border:1px solid #cfd0cb;border-radius:20px;padding:6px 18px;cursor:pointer;transition:all .18s ease;}
+.cp-chip:hover{border-color:#74c77b;color:#40b74c;}
+.cp-chip.active{background:#fff;border-color:#f0855e;color:#f0855e;box-shadow:0 2px 8px rgba(240,133,94,.18);}
+.cp-window{background:#1c2128;border-radius:12px;overflow:hidden;box-shadow:0 24px 60px rgba(20,30,25,.28);border:1px solid rgba(255,255,255,.06);}
+.cp-titlebar{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#161a20;border-bottom:1px solid rgba(255,255,255,.06);}
+.cp-dots{display:inline-flex;gap:7px;flex-shrink:0;}
+.cp-dots i{width:12px;height:12px;border-radius:50%;display:block;}
+.cp-dots i:nth-child(1){background:#f0855e;}
+.cp-dots i:nth-child(2){background:#e6c15e;}
+.cp-dots i:nth-child(3){background:#74c77b;}
+.cp-filename{flex:1;color:#8b98a5;font-family:'Inconsolata',monospace;font-size:14px;font-weight:400;}
+.cp-copy{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid rgba(255,255,255,.16);color:#c3ccd6;border-radius:6px;padding:5px 14px;font-family:"Nunito",sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .18s ease;flex-shrink:0;}
+.cp-copy:hover{border-color:#74c77b;color:#74c77b;}
+.cp-copy.copied{border-color:#40b74c;color:#40b74c;}
+.cp-code{margin:0;padding:22px 24px;background:#1c2128;overflow-x:auto;max-height:380px;}
+.cp-code code{font-family:'Inconsolata','SFMono-Regular',Consolas,monospace;font-size:15px;line-height:1.6;font-weight:500;color:#d7dde3;white-space:pre;display:block;text-align:left;}
+.cp-code .cp-com{color:#6d7f72;font-style:italic;}
+.cp-code .cp-str{color:#e3a06a;}
+.cp-code .cp-kw{color:#8fb2f5;}
+.cp-code .cp-pre{color:#c99be0;}
+.cp-code .cp-fn{color:#74c77b;}
+.cp-code .cp-num{color:#5fc9c1;}
+.cp-runbar{display:flex;align-items:center;gap:14px;padding:14px 16px;background:#161a20;border-top:1px solid rgba(255,255,255,.06);}
+.cp-run{display:inline-flex;align-items:center;gap:8px;background:#f0855e;color:#fff;border:none;border-radius:8px;padding:9px 24px;font-family:"Nunito",sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s ease;box-shadow:0 6px 16px rgba(240,133,94,.3);}
+.cp-run:hover{background:#e5734a;transform:translateY(-1px);}
+.cp-run:disabled{opacity:.6;cursor:default;transform:none;box-shadow:none;}
+.cp-run-icon{font-size:11px;line-height:1;}
+.cp-hint{color:#69737d;font-size:13px;}
+.cp-console{border-top:1px solid rgba(255,255,255,.06);background:#12161b;}
+.cp-console-head{display:flex;justify-content:space-between;align-items:center;padding:9px 18px;color:#69737d;font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;}
+.cp-console-close{background:none;border:none;color:#69737d;font-size:22px;line-height:1;cursor:pointer;padding:0 4px;}
+.cp-console-close:hover{color:#c3ccd6;}
+.cp-console-body{margin:0;padding:2px 24px 20px;font-family:'Inconsolata',monospace;font-size:14px;line-height:1.65;color:#a7f0b5;white-space:pre-wrap;overflow-x:auto;text-align:left;min-height:20px;}
+.cp-console-body .cp-run-cmd{color:#69737d;}
+.cp-console-body .cp-run-blink::after{content:"\2588";animation:cp-blink 1s steps(2) infinite;color:#74c77b;}
+@keyframes cp-blink{0%,100%{opacity:1;}50%{opacity:0;}}
+.cp-docs{text-align:center;margin-top:28px;font-size:16px;}
+.cp-docs a span{color:#40b74c;}
+.cp-docs a:hover span{color:#f0855e;}
+@media (max-width:575px){.cp-code{padding:16px;font-size:13px;}.cp-lang{padding:8px 16px;font-size:14px;}.cp-code code{font-size:13px;}}
+</style>
+
+<script>
+(function(){
+    var root = document.getElementById('code-playground');
+    if (!root) return;
+
+    var FILES = {python:'example.py', cpp:'main.cpp', javascript:'app.mjs', cli:'bash'};
+    var RUNCMD = {python:'$ python example.py', cpp:'$ ./example', javascript:'$ node app.mjs', cli:''};
+
+    var EXAMPLES = {
+        python: [
+            { name:'Edit a wall', code:
+`import ifcopenshell
+
+# Open an IFC model from disk
+model = ifcopenshell.open("model.ifc")
+
+# Find every wall and rename the first one
+walls = model.by_type("IfcWall")
+walls[0].Name = "My wall"
+
+model.write("updated-model.ifc")
+print(f"Renamed 1 of {len(walls)} walls")`,
+              out:`Renamed 1 of 34 walls` },
+            { name:'Inspect a door', code:
+`import ifcopenshell
+import ifcopenshell.util.element
+
+model = ifcopenshell.open("model.ifc")
+door = model.by_type("IfcDoor")[0]
+
+# Pull the properties, type and storey of a door
+psets = ifcopenshell.util.element.get_psets(door)
+door_type = ifcopenshell.util.element.get_type(door)
+storey = ifcopenshell.util.element.get_container(door, ifc_class="IfcBuildingStorey")
+
+print(door_type.Name, "on", storey.Name)
+print("Fire rating:", psets["Pset_DoorCommon"]["FireRating"])`,
+              out:`DBL-1200x2100 on Level 1
+Fire rating: 60min` },
+            { name:'Author from scratch', code:
+`import ifcopenshell.api.root
+import ifcopenshell.api.unit
+import ifcopenshell.api.context
+import ifcopenshell.api.project
+import ifcopenshell.api.spatial
+import ifcopenshell.api.geometry
+import ifcopenshell.api.aggregate
+
+# Create a blank model
+model = ifcopenshell.api.project.create_file()
+
+# All projects must have one IFC Project element
+project = ifcopenshell.api.root.create_entity(model, ifc_class="IfcProject", name="My Project")
+
+# Geometry is optional in IFC, but here we want it, so let's define units
+ifcopenshell.api.unit.assign_unit(model)
+
+# Let's create a modeling geometry context, so we can store 3D geometry
+context = ifcopenshell.api.context.add_context(model, context_type="Model")
+body = ifcopenshell.api.context.add_context(model, context_type="Model",
+    context_identifier="Body", target_view="MODEL_VIEW", parent=context)
+
+# Create a site, building, and storey. Many hierarchies are possible.
+site = ifcopenshell.api.root.create_entity(model, ifc_class="IfcSite", name="My Site")
+building = ifcopenshell.api.root.create_entity(model, ifc_class="IfcBuilding", name="Building A")
+storey = ifcopenshell.api.root.create_entity(model, ifc_class="IfcBuildingStorey", name="Ground Floor")
+
+# Place the building on the site, and the storey in the building
+ifcopenshell.api.aggregate.assign_object(model, relating_object=project, products=[site])
+ifcopenshell.api.aggregate.assign_object(model, relating_object=site, products=[building])
+ifcopenshell.api.aggregate.assign_object(model, relating_object=building, products=[storey])
+
+# Create a wall with a local origin at (0, 0, 0)
+wall = ifcopenshell.api.root.create_entity(model, ifc_class="IfcWall")
+ifcopenshell.api.geometry.edit_object_placement(model, product=wall)
+
+# Add a body geometry: 5m long, 3m high, and 200mm thick
+representation = ifcopenshell.api.geometry.add_wall_representation(model, context=body, length=5, height=3, thickness=0.2)
+ifcopenshell.api.geometry.assign_representation(model, product=wall, representation=representation)
+
+# Place our wall in the ground floor, then write to a file
+ifcopenshell.api.spatial.assign_container(model, relating_structure=storey, products=[wall])
+model.write("model.ifc")`,
+              out:`Wrote model.ifc (IFC4) - 1 wall, 5.0 x 3.0 x 0.2m` }
+        ],
+        cpp: [
+            { name:'Read walls', code:
+`#include <ifcparse/Ifc4.h>
+#include <ifcparse/IfcFile.h>
+#include <iostream>
+
+int main() {
+    IfcParse::IfcFile file("model.ifc");
+
+    // Grab every IfcWall in the model
+    auto walls = file.instances_by_type<Ifc4::IfcWall>();
+    std::cout << walls->size() << " walls found\n";
+
+    for (auto wall : *walls)
+        std::cout << wall->Name().get_value_or("<unnamed>") << "\n";
+}`,
+              out:`34 walls found
+Exterior - Brick
+Interior - Partition
+Core - Concrete
+...` },
+            { name:'Extract geometry', code:
+`#include <ifcgeom/Iterator.h>
+#include <ifcparse/IfcFile.h>
+#include <iostream>
+
+int main() {
+    IfcParse::IfcFile file("model.ifc");
+    ifcopenshell::geometry::Settings settings;
+
+    // Triangulate every product and stream the meshes
+    IfcGeom::Iterator it(settings, &file);
+    if (it.initialize()) {
+        do {
+            auto* elem = it.get();
+            std::cout << elem->name() << ": "
+                      << elem->geometry().verts().size() / 3
+                      << " vertices\n";
+        } while (it.next());
+    }
+}`,
+              out:`Wall - Exterior: 8 vertices
+Window - 01: 16 vertices
+Slab - Ground: 8 vertices
+...` },
+            { name:'Author a model', code:
+`#include <ifcparse/Ifc4.h>
+#include <ifcparse/IfcHierarchyHelper.h>
+#include <fstream>
+
+int main() {
+    IfcHierarchyHelper<Ifc4> model;
+
+    // Create a wall and attach it to the spatial hierarchy
+    auto* wall = new Ifc4::IfcWall(
+        IfcParse::IfcGlobalId(), nullptr, std::string("My wall"),
+        boost::none, boost::none, nullptr, nullptr,
+        boost::none, boost::none);
+    model.addBuildingProduct(wall);
+
+    std::ofstream("model.ifc") << model;
+}`,
+              out:`Wrote model.ifc - 1 wall in schema IFC4` }
+        ],
+        javascript: [
+            { name:'In the browser', code:
+`import { loadPyodide } from "pyodide";
+
+// Boot the Python runtime and install IfcOpenShell
+const pyodide = await loadPyodide();
+await pyodide.loadPackage("ifcopenshell");
+
+// Then use IfcOpenShell exactly like you would in Python
+const names = pyodide.runPython(\`
+    import ifcopenshell
+    model = ifcopenshell.open("model.ifc")
+    [w.Name for w in model.by_type("IfcWall")]
+\`).toJs();
+
+console.log(names);`,
+              out:`[ 'Exterior - Brick', 'Interior - Partition', 'Core - Concrete' ]` },
+            { name:'Count entities', code:
+`// Tally how many of each IFC entity the model holds
+const summary = pyodide.runPython(\`
+    import ifcopenshell
+    from collections import Counter
+    model = ifcopenshell.open("model.ifc")
+    dict(Counter(e.is_a() for e in model))
+\`).toJs({ dict_converter: Object.fromEntries });
+
+console.table(summary);`,
+              out:`{ IfcWall: 34, IfcDoor: 12, IfcWindow: 21, IfcSlab: 8 }` },
+            { name:'From a file input', code:
+`// Read the .ifc a user picked into Pyodide's filesystem
+const file = document.querySelector("input[type=file]").files[0];
+const buffer = new Uint8Array(await file.arrayBuffer());
+pyodide.FS.writeFile("model.ifc", buffer);
+
+const schema = pyodide.runPython(\`
+    import ifcopenshell
+    ifcopenshell.open("model.ifc").schema
+\`);
+
+console.log("Schema:", schema);`,
+              out:`Schema: IFC4` }
+        ],
+        cli: [
+            { name:'Convert', code:
+`# Convert an IFC model to glTF for the web
+IfcConvert model.ifc model.glb
+
+# ...or to Collada, shifting the project origin
+IfcConvert --model-offset "10000;10000;0" model.ifc model.dae`,
+              out:`Reading model.ifc ...
+[####################] 100%  done in 3.2s
+Created model.glb (2.4 MB)` },
+            { name:'Validate (IDS)', code:
+`# Audit a model against an IDS specification
+ifctester specs.ids model.ifc
+
+# Produce a shareable HTML report
+ifctester specs.ids model.ifc -r Html -o report.html`,
+              out:`specs.ids
+  PASS  128 / 128 specifications
+Report written to report.html` },
+            { name:'Diff & report', code:
+`# See what changed between two revisions
+ifcdiff old.ifc new.ifc
+
+# Export a door schedule to a spreadsheet
+ifccsv -i model.ifc -o doors.csv -q "IfcDoor"
+
+# Run clash detection between two sets
+ifcclash -o results.json clashsets.json`,
+              out:`ifcdiff  : 3 added, 1 deleted, 7 changed
+ifccsv   : wrote doors.csv (12 rows)
+ifcclash : 2 clashes found` }
+        ]
+    };
+
+    var KEYWORDS = {
+        python: ['import','from','as','for','in','if','else','elif','return','def','class','with','None','True','False','and','or','not','lambda','print'],
+        cpp: ['include','int','auto','for','if','else','return','void','const','new','class','struct','std','nullptr','while','do','using','namespace','bool'],
+        javascript: ['import','from','const','let','var','await','async','function','return','new','for','of','if','else','document','window'],
+        cli: []
+    };
+
+    var HLCACHE = {};
+    function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    function buildHL(lang){
+        var g = [];
+        if (lang === 'cpp' || lang === 'javascript') g.push(['com', '\\/\\/[^\\n]*']);
+        if (lang === 'python' || lang === 'cli')     g.push(['com', '#[^\\n]*']);
+        g.push(['str', '"(?:[^"\\\\]|\\\\.)*"|\'(?:[^\'\\\\]|\\\\.)*\'']);
+        if (lang === 'cpp'){ g.push(['pre', '#[A-Za-z]+']); g.push(['str', '&lt;[\\w./]+&gt;']); }
+        if (KEYWORDS[lang].length) g.push(['kw', '\\b(?:' + KEYWORDS[lang].join('|') + ')\\b']);
+        g.push(['fn', '\\bifcopenshell\\b|\\bpyodide\\b|\\bIfc[A-Za-z][A-Za-z0-9_]*|\\b(?:ifctester|ifcdiff|ifccsv|ifcclash)\\b']);
+        g.push(['num', '\\b\\d[\\w.]*\\b']);
+        var re = new RegExp(g.map(function(x){ return '(' + x[1] + ')'; }).join('|'), 'g');
+        return { re:re, cls:g.map(function(x){ return x[0]; }) };
+    }
+
+    function highlight(code, lang){
+        var hl = HLCACHE[lang] || (HLCACHE[lang] = buildHL(lang));
+        return esc(code).replace(hl.re, function(){
+            for (var i = 1; i <= hl.cls.length; i++){
+                if (arguments[i] != null)
+                    return '<span class="cp-' + hl.cls[i-1] + '">' + arguments[i] + '</span>';
+            }
+            return arguments[0];
+        });
+    }
+
+    var langBtns   = root.querySelectorAll('.cp-lang');
+    var exWrap     = root.querySelector('.cp-examples');
+    var codeEl     = root.querySelector('.cp-code code');
+    var fileEl     = root.querySelector('.cp-filename');
+    var copyBtn    = root.querySelector('.cp-copy');
+    var copyLabel  = root.querySelector('.cp-copy-label');
+    var runBtn     = root.querySelector('.cp-run');
+    var consoleEl  = root.querySelector('.cp-console');
+    var consoleBody= root.querySelector('.cp-console-body');
+    var closeBtn   = root.querySelector('.cp-console-close');
+    var state = { lang:'python', index:0, raw:'' };
+    var runTimer = null;
+
+    function hideConsole(){ consoleEl.hidden = true; consoleBody.textContent = ''; if (runTimer){ clearTimeout(runTimer); runTimer = null; } runBtn.disabled = false; }
+
+    function selectExample(i){
+        state.index = i;
+        var chips = exWrap.querySelectorAll('.cp-chip');
+        for (var c = 0; c < chips.length; c++) chips[c].classList.toggle('active', c === i);
+        var ex = EXAMPLES[state.lang][i];
+        state.raw = ex.code;
+        codeEl.innerHTML = highlight(ex.code, state.lang);
+        fileEl.textContent = FILES[state.lang];
+        copyBtn.classList.remove('copied');
+        copyLabel.textContent = 'Copy';
+        hideConsole();
+    }
+
+    function selectLang(lang){
+        state.lang = lang;
+        for (var b = 0; b < langBtns.length; b++) langBtns[b].classList.toggle('active', langBtns[b].getAttribute('data-lang') === lang);
+        exWrap.innerHTML = '';
+        EXAMPLES[lang].forEach(function(ex, i){
+            var chip = document.createElement('button');
+            chip.className = 'cp-chip' + (i === 0 ? ' active' : '');
+            chip.type = 'button';
+            chip.textContent = ex.name;
+            chip.addEventListener('click', function(){ selectExample(i); });
+            exWrap.appendChild(chip);
+        });
+        selectExample(0);
+    }
+
+    for (var l = 0; l < langBtns.length; l++){
+        (function(btn){ btn.addEventListener('click', function(){ selectLang(btn.getAttribute('data-lang')); }); })(langBtns[l]);
+    }
+
+    runBtn.addEventListener('click', function(){
+        var ex = EXAMPLES[state.lang][state.index];
+        var cmd = RUNCMD[state.lang];
+        consoleEl.hidden = false;
+        runBtn.disabled = true;
+        consoleBody.innerHTML = (cmd ? '<span class="cp-run-cmd">' + cmd + '</span>\n' : '') + '<span class="cp-run-blink"></span>';
+        if (runTimer) clearTimeout(runTimer);
+        runTimer = setTimeout(function(){
+            consoleBody.innerHTML = '';
+            if (cmd){
+                var c = document.createElement('span');
+                c.className = 'cp-run-cmd';
+                c.textContent = cmd + '\n';
+                consoleBody.appendChild(c);
+            }
+            consoleBody.appendChild(document.createTextNode(ex.out + '\n'));
+            runBtn.disabled = false;
+            runTimer = null;
+        }, 700);
+    });
+
+    closeBtn.addEventListener('click', hideConsole);
+
+    copyBtn.addEventListener('click', function(){
+        var text = state.raw;
+        var done = function(){
+            copyBtn.classList.add('copied');
+            copyLabel.textContent = 'Copied!';
+            setTimeout(function(){ copyBtn.classList.remove('copied'); copyLabel.textContent = 'Copy'; }, 1800);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText){
+            navigator.clipboard.writeText(text).then(done, function(){ fallbackCopy(text, done); });
+        } else {
+            fallbackCopy(text, done);
+        }
+    });
+
+    function fallbackCopy(text, cb){
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); cb(); } catch (e) {}
+        document.body.removeChild(ta);
+    }
+
+    selectLang('python');
+})();
+</script>
+
             </div>
         </div>
         <!-- Carousel Section -->
@@ -476,18 +771,18 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </div>
                         
                         <div>
-                            <a href="https://opencollective.com/baupunktnull-ag">
-                            <img src="https://images.opencollective.com/baupunktnull-ag/cedb389/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            BAUPUNKTNULL AG
-                            </a>
-                        </div>
-                        
-                        <div>
                             <a href="https://opencollective.com/randolph">
                             <img src="https://images.opencollective.com/randolph/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
                             Randolph
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://opencollective.com/baupunktnull-ag">
+                            <img src="https://images.opencollective.com/baupunktnull-ag/cedb389/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            BAUPUNKTNULL AG
                             </a>
                         </div>
                         
@@ -500,14 +795,6 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </div>
                         
                         <div>
-                            <a href="https://opencollective.com/matthew-fuller">
-                            <img src="https://images.opencollective.com/matthew-fuller/1320eb7/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            Matthew Fuller
-                            </a>
-                        </div>
-                        
-                        <div>
                             <a href="https://opencollective.com/user-1a7e2094">
                             <img src="https://images.opencollective.com/user-1a7e2094/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
@@ -516,10 +803,26 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </div>
                         
                         <div>
+                            <a href="https://opencollective.com/matthew-fuller">
+                            <img src="https://images.opencollective.com/matthew-fuller/1320eb7/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Matthew Fuller
+                            </a>
+                        </div>
+                        
+                        <div>
                             <a href="https://opencollective.com/gortemakeralgrafeenstra">
                             <img src="https://images.opencollective.com/gortemakeralgrafeenstra/27817b6/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
                             Gortemaker Algra Feenstra
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://opencollective.com/carlopav">
+                            <img src="https://images.opencollective.com/carlopav/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            carlopav
                             </a>
                         </div>
                         
@@ -540,14 +843,6 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </div>
                         
                         <div>
-                            <a href="https://opencollective.com/carlopav">
-                            <img src="https://images.opencollective.com/carlopav/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            carlopav
-                            </a>
-                        </div>
-                        
-                        <div>
                             <a href="https://opencollective.com/creoox">
                             <img src="https://images.opencollective.com/creoox/88abcb3/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
@@ -560,6 +855,22 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             <img src="https://images.opencollective.com/lawrence-giroux/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
                             Lawrence Giroux
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://opencollective.com/marius-zumwald">
+                            <img src="https://images.opencollective.com/marius-zumwald/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Marius Zumwald
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://opencollective.com/sven-amiet">
+                            <img src="https://images.opencollective.com/sven-amiet/5d5a30d/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Sven Amiet
                             </a>
                         </div>
                         
@@ -588,10 +899,26 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </div>
                         
                         <div>
-                            <a href="https://opencollective.com/sven-amiet">
-                            <img src="https://images.opencollective.com/sven-amiet/5d5a30d/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <a href="https://opencollective.com/stefstap">
+                            <img src="https://images.opencollective.com/stefstap/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
-                            Sven Amiet
+                            StefStap
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://opencollective.com/guest-277bf83f">
+                            <img src="https://images.opencollective.com/guest-277bf83f/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Losepacific
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://opencollective.com/hannes-worn">
+                            <img src="https://images.opencollective.com/hannes-worn/4a4aa13/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Hannes Wörn
                             </a>
                         </div>
                         
@@ -612,26 +939,10 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </div>
                         
                         <div>
-                            <a href="https://opencollective.com/stefstap">
-                            <img src="https://images.opencollective.com/stefstap/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            StefStap
-                            </a>
-                        </div>
-                        
-                        <div>
                             <a href="https://opencollective.com/daniel60">
                             <img src="https://images.opencollective.com/daniel60/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
                             Daniel
-                            </a>
-                        </div>
-                        
-                        <div>
-                            <a href="https://opencollective.com/guest-277bf83f">
-                            <img src="https://images.opencollective.com/guest-277bf83f/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            Losepacific
                             </a>
                         </div>
                         
@@ -644,18 +955,10 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </div>
                         
                         <div>
-                            <a href="https://opencollective.com/marius-zumwald">
-                            <img src="https://images.opencollective.com/marius-zumwald/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <a href="https://opencollective.com/cvillagrasa">
+                            <img src="https://images.opencollective.com/cvillagrasa/a9984aa/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
-                            Marius Zumwald
-                            </a>
-                        </div>
-                        
-                        <div>
-                            <a href="https://opencollective.com/hannes-worn">
-                            <img src="https://images.opencollective.com/hannes-worn/4a4aa13/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            Hannes Wörn
+                            Carlos Villagrasa
                             </a>
                         </div>
                         
@@ -664,14 +967,6 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             <img src="https://images.opencollective.com/ari-pikkarainen/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
                             Ari Pikkarainen
-                            </a>
-                        </div>
-                        
-                        <div>
-                            <a href="https://opencollective.com/cvillagrasa">
-                            <img src="https://images.opencollective.com/cvillagrasa/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            cvillagrasa
                             </a>
                         </div>
                         
@@ -688,6 +983,54 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             <img src="https://images.opencollective.com/ppaawweeuu/159624f/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
                             ppaawweeuu
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://opencollective.com/vyer-technologies">
+                            <img src="https://images.opencollective.com/vyer-technologies/a4cebd4/logo/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Vyer Technologies
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://opencollective.com/duarte-farrajota-ramos">
+                            <img src="https://images.opencollective.com/duarte-farrajota-ramos/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Duarte Farrajota Ramos
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://opencollective.com/guest-08b4953b">
+                            <img src="https://images.opencollective.com/guest-08b4953b/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Alex
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://opencollective.com/guest-d18f0071">
+                            <img src="https://images.opencollective.com/guest-d18f0071/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Víctor Bertran
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://opencollective.com/leon-ten-brinke">
+                            <img src="https://images.opencollective.com/leon-ten-brinke/2dde7ca/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Leon ten Brinke
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://opencollective.com/jonathon-broughton">
+                            <img src="https://images.opencollective.com/jonathon-broughton/af2da67/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            JONATHON BROUGHTON
                             </a>
                         </div>
                         
@@ -716,10 +1059,18 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </div>
                         
                         <div>
-                            <a href="https://opencollective.com/leon-ten-brinke">
-                            <img src="https://images.opencollective.com/leon-ten-brinke/2dde7ca/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <a href="https://opencollective.com/guest-25354642">
+                            <img src="https://images.opencollective.com/guest-25354642/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
-                            Leon ten Brinke
+                            Rodas
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://opencollective.com/guest-987b39cd">
+                            <img src="https://images.opencollective.com/guest-987b39cd/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            bitenergie
                             </a>
                         </div>
                         
@@ -740,10 +1091,10 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </div>
                         
                         <div>
-                            <a href="https://opencollective.com/jonathon-broughton">
-                            <img src="https://images.opencollective.com/jonathon-broughton/af2da67/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <a href="https://opencollective.com/speckle1">
+                            <img src="https://images.opencollective.com/speckle1/2722430/logo/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
-                            JONATHON BROUGHTON
+                            Speckle
                             </a>
                         </div>
                         
@@ -788,6 +1139,14 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </div>
                         
                         <div>
+                            <a href="https://github.com/Gorgious56">
+                            <img src="https://avatars.githubusercontent.com/u/25156105?v=4" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Gorgious56
+                            </a>
+                        </div>
+                        
+                        <div>
                             <a href="https://github.com/brunoperdigao">
                             <img src="https://avatars.githubusercontent.com/u/57102715?v=4" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
@@ -815,34 +1174,10 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </div>
                         
                         <div>
-                            <a href="https://opencollective.com/guest-08b4953b">
-                            <img src="https://images.opencollective.com/guest-08b4953b/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <a href="https://opencollective.com/udo1">
+                            <img src="https://images.opencollective.com/udo1/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
-                            Alex
-                            </a>
-                        </div>
-                        
-                        <div>
-                            <a href="https://opencollective.com/duarte-farrajota-ramos">
-                            <img src="https://images.opencollective.com/duarte-farrajota-ramos/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            Duarte Farrajota Ramos
-                            </a>
-                        </div>
-                        
-                        <div>
-                            <a href="https://opencollective.com/guest-d18f0071">
-                            <img src="https://images.opencollective.com/guest-d18f0071/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            Víctor Bertran
-                            </a>
-                        </div>
-                        
-                        <div>
-                            <a href="https://opencollective.com/guest-987b39cd">
-                            <img src="https://images.opencollective.com/guest-987b39cd/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            bitenergie
+                            Udo
                             </a>
                         </div>
                         
@@ -855,18 +1190,10 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </div>
                         
                         <div>
-                            <a href="https://opencollective.com/guest-25354642">
-                            <img src="https://images.opencollective.com/guest-25354642/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <a href="https://opencollective.com/arjan1">
+                            <img src="https://images.opencollective.com/arjan1/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
-                            Rodas
-                            </a>
-                        </div>
-                        
-                        <div>
-                            <a href="https://opencollective.com/udo1">
-                            <img src="https://images.opencollective.com/udo1/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            Udo
+                            Arjan
                             </a>
                         </div>
                         
@@ -887,10 +1214,10 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </div>
                         
                         <div>
-                            <a href="https://opencollective.com/vyer-technologies">
-                            <img src="https://images.opencollective.com/vyer-technologies/a4cebd4/logo/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <a href="https://opencollective.com/guest-889b3da5">
+                            <img src="https://images.opencollective.com/guest-889b3da5/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
-                            Vyer Technologies
+                            Hannes
                             </a>
                         </div>
                         
@@ -903,6 +1230,22 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </div>
                         
                         <div>
+                            <a href="https://opencollective.com/hnnng">
+                            <img src="https://images.opencollective.com/hnnng/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Henning M.
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://opencollective.com/user-63167755">
+                            <img src="https://images.opencollective.com/user-63167755/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Incognito
+                            </a>
+                        </div>
+                        
+                        <div>
                             <a href="https://opencollective.com/aeco-dev">
                             <img src="https://images.opencollective.com/aeco-dev/869bb7c/logo/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
@@ -911,26 +1254,10 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </div>
                         
                         <div>
-                            <a href="https://opencollective.com/arjan1">
-                            <img src="https://images.opencollective.com/arjan1/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <a href="https://opencollective.com/dmitriy-koptev">
+                            <img src="https://images.opencollective.com/dmitriy-koptev/eee0711/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
-                            Arjan
-                            </a>
-                        </div>
-                        
-                        <div>
-                            <a href="https://opencollective.com/guest-889b3da5">
-                            <img src="https://images.opencollective.com/guest-889b3da5/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            Hannes
-                            </a>
-                        </div>
-                        
-                        <div>
-                            <a href="https://opencollective.com/hnnng">
-                            <img src="https://images.opencollective.com/hnnng/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            Henning M.
+                            Dmitriy Koptev
                             </a>
                         </div>
                         
@@ -951,6 +1278,14 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </div>
                         
                         <div>
+                            <a href="https://opencollective.com/fabian-emanuel-kitzberger">
+                            <img src="https://images.opencollective.com/fabian-emanuel-kitzberger/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Fabian Emanuel Kitzberger
+                            </a>
+                        </div>
+                        
+                        <div>
                             <a href="https://opencollective.com/git_ifc">
                             <img src="https://images.opencollective.com/git_ifc/logo/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
@@ -967,14 +1302,6 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </div>
                         
                         <div>
-                            <a href="https://opencollective.com/user-63167755">
-                            <img src="https://images.opencollective.com/user-63167755/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            Incognito
-                            </a>
-                        </div>
-                        
-                        <div>
                             <a href="https://opencollective.com/guest-325c45dd">
                             <img src="https://images.opencollective.com/guest-325c45dd/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
@@ -983,10 +1310,10 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </div>
                         
                         <div>
-                            <a href="https://opencollective.com/dmitriy-koptev">
-                            <img src="https://images.opencollective.com/dmitriy-koptev/eee0711/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <a href="https://opencollective.com/guest-05fda595">
+                            <img src="https://images.opencollective.com/guest-05fda595/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
-                            Dmitriy Koptev
+                            Mattijs
                             </a>
                         </div>
                         
@@ -999,10 +1326,18 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </div>
                         
                         <div>
-                            <a href="https://opencollective.com/fabian-emanuel-kitzberger">
-                            <img src="https://images.opencollective.com/fabian-emanuel-kitzberger/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <a href="https://opencollective.com/bclmnt">
+                            <img src="https://images.opencollective.com/bclmnt/7896105/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
-                            Fabian Emanuel Kitzberger
+                            bclmnt
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://opencollective.com/guest-ce4524c2">
+                            <img src="https://images.opencollective.com/guest-ce4524c2/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            casiovadal
                             </a>
                         </div>
                         
@@ -1011,6 +1346,22 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             <img src="https://images.opencollective.com/user-bc556876/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
                             Incognito
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://opencollective.com/krande">
+                            <img src="https://images.opencollective.com/krande/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Krande
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://opencollective.com/arun7">
+                            <img src="https://images.opencollective.com/arun7/920fddb/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Arun
                             </a>
                         </div>
                         
@@ -1031,10 +1382,10 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </div>
                         
                         <div>
-                            <a href="https://opencollective.com/speckle1">
-                            <img src="https://images.opencollective.com/speckle1/2722430/logo/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <a href="https://opencollective.com/guest-a1d4dc1f">
+                            <img src="https://images.opencollective.com/guest-a1d4dc1f/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
-                            Speckle
+                            Thomas
                             </a>
                         </div>
                         
@@ -1043,14 +1394,6 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             <img src="https://images.opencollective.com/guest-60f918a4/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
                             Rhomberg Sersa Rail Group
-                            </a>
-                        </div>
-                        
-                        <div>
-                            <a href="https://github.com/Gorgious56">
-                            <img src="https://avatars.githubusercontent.com/u/25156105?v=4" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            Gorgious56
                             </a>
                         </div>
                         
@@ -1079,10 +1422,10 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </div>
                         
                         <div>
-                            <a href="https://github.com/Stinkfist0">
-                            <img src="https://avatars.githubusercontent.com/u/227876?v=4" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <a href="https://github.com/falken10vdl">
+                            <img src="https://avatars.githubusercontent.com/u/33285113?v=4" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
-                            Stinkfist0
+                            falken10vdl
                             </a>
                         </div>
                         
@@ -1095,10 +1438,18 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </div>
                         
                         <div>
-                            <a href="https://github.com/falken10vdl">
-                            <img src="https://avatars.githubusercontent.com/u/33285113?v=4" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <a href="https://github.com/Stinkfist0">
+                            <img src="https://avatars.githubusercontent.com/u/227876?v=4" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
-                            falken10vdl
+                            Stinkfist0
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://github.com/BIMvoice">
+                            <img src="https://avatars.githubusercontent.com/u/139251053?v=4" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            BIMvoice
                             </a>
                         </div>
                         
@@ -1123,6 +1474,14 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             <img src="https://avatars.githubusercontent.com/u/68874104?v=4" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
                             Ziad-I
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://github.com/apps/dependabot">
+                            <img src="https://avatars.githubusercontent.com/in/29110?v=4" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            dependabot[bot]
                             </a>
                         </div>
                         
@@ -1167,18 +1526,10 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </div>
                         
                         <div>
-                            <a href="https://github.com/apps/dependabot">
-                            <img src="https://avatars.githubusercontent.com/in/29110?v=4" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <a href="https://github.com/sboddy">
+                            <img src="https://avatars.githubusercontent.com/u/12862430?v=4" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
-                            dependabot[bot]
-                            </a>
-                        </div>
-                        
-                        <div>
-                            <a href="https://github.com/Jesusbill">
-                            <img src="https://avatars.githubusercontent.com/u/6861582?v=4" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            Jesusbill
+                            sboddy
                             </a>
                         </div>
                         
@@ -1187,6 +1538,14 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             <img src="https://avatars.githubusercontent.com/u/9622862?v=4" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
                             CyrilWaechter
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://github.com/Jesusbill">
+                            <img src="https://avatars.githubusercontent.com/u/6861582?v=4" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Jesusbill
                             </a>
                         </div>
                         
@@ -1209,93 +1568,8 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                     </div>
                     <div class="partners-logo tier3">
                         
-                        <a href="https://opencollective.com/bclmnt" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/bclmnt/7896105/avatar/100.png" title="bclmnt" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/guest-ce4524c2" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/guest-ce4524c2/avatar/100.png" title="casiovadal" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/arun7" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/arun7/920fddb/avatar/100.png" title="Arun" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/n1k0" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/n1k0/avatar/100.png" title="N1k0" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/krande" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/krande/avatar/100.png" title="Krande" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/incognito-6061ab77" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/incognito-6061ab77/avatar/100.png" title="Incognito" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/guest-05fda595" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/guest-05fda595/avatar/100.png" title="Mattijs" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/guest-f3f49125" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/guest-f3f49125/avatar/100.png" title="Alexander Kleemann" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/madars-siksna" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/madars-siksna/53dabdd/avatar/100.png" title="Madars Siksna" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/abdelmalek" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/abdelmalek/avatar/100.png" title="Abdelmalek HARRAG" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/hjalti" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/hjalti/avatar/100.png" title="Hjalti" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/guest-7ae5f0a3" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/guest-7ae5f0a3/avatar/100.png" title="Ivo Leeman" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/julio15" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/julio15/avatar/100.png" title="Julio" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/smiljan-tukic" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/smiljan-tukic/c39d7de/avatar/100.png" title="Smiljan Tukic" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                         <a href="https://opencollective.com/denis-pommier" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/denis-pommier/5a3102b/avatar/100.png" title="Denis Pommier" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/benny2" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/benny2/avatar/100.png" title="Benny" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/rafel-bayarre" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/rafel-bayarre/avatar/100.png" title="Rafel Bayarre" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/omar-zerhouni" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/omar-zerhouni/avatar/100.png" title="Omar Zerhouni" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1304,13 +1578,58 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://opencollective.com/guest-dfdf9a94" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/guest-dfdf9a94/avatar/100.png" title="Guest" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/guest-f3f49125" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-f3f49125/avatar/100.png" title="Alexander Kleemann" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
-                        <a href="https://opencollective.com/tim-mcginley" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/tim-mcginley/avatar/100.png" title="Tim McGinley" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/n1k0" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/n1k0/avatar/100.png" title="N1k0" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/guest-4b881227" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-4b881227/avatar/100.png" title="Abdelhamid BELMAARIS" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/nigel-lamb" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/nigel-lamb/748e0b4/avatar/100.png" title="Nigel" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/hjalti" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/hjalti/avatar/100.png" title="Hjalti" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/smiljan-tukic" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/smiljan-tukic/c39d7de/avatar/100.png" title="Smiljan Tukic" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/benny2" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/benny2/avatar/100.png" title="Benny" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/madars-siksna" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/madars-siksna/53dabdd/avatar/100.png" title="Madars Siksna" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/rafel-bayarre" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/rafel-bayarre/avatar/100.png" title="Rafel Bayarre" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/abdelmalek" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/abdelmalek/avatar/100.png" title="Abdelmalek HARRAG" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/guest-dfdf9a94" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-dfdf9a94/avatar/100.png" title="Guest" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1319,8 +1638,23 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://opencollective.com/guest-4b881227" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/guest-4b881227/avatar/100.png" title="Abdelhamid BELMAARIS" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/guest-7ae5f0a3" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-7ae5f0a3/avatar/100.png" title="Ivo Leeman" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/guest-5f1d018d" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-5f1d018d/avatar/100.png" title="Sam Morley" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/julio15" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/julio15/avatar/100.png" title="Julio" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/tim-mcginley" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/tim-mcginley/avatar/100.png" title="Tim McGinley" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1334,8 +1668,23 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
+                        <a href="https://opencollective.com/omar-zerhouni" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/omar-zerhouni/avatar/100.png" title="Omar Zerhouni" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
                         <a href="https://opencollective.com/guest-5d3928af" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/guest-5d3928af/avatar/100.png" title="Dr. Richard Hollmann" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/guest-63e71a8d" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-63e71a8d/avatar/100.png" title="Matthieu" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/benjamin-smith3" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/benjamin-smith3/avatar/100.png" title="Benjamin Smith" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1349,8 +1698,28 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://opencollective.com/guest-5f1d018d" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/guest-5f1d018d/avatar/100.png" title="Sam Morley" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/choonghyun" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/choonghyun/avatar/100.png" title="Choong1219" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/louis17" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/louis17/ac3fe9a/avatar/100.png" title="Louis Casteleyn" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/alexey-3e9bfbb0" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/alexey-3e9bfbb0/27681a2/avatar/100.png" title="ALEXEY" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/betz" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/betz/avatar/100.png" title="Betz" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/guest-4cf36329" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-4cf36329/avatar/100.png" title="Valter" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1364,6 +1733,11 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
+                        <a href="https://opencollective.com/aslejo" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/aslejo/avatar/100.png" title="Aslejo" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
                         <a href="https://opencollective.com/johnson-bankole" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/johnson-bankole/avatar/100.png" title="Johnson Bankole" class="wow fadeInUp delay-0-2s" />
                             
@@ -1374,8 +1748,8 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://opencollective.com/benjamin-smith3" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/benjamin-smith3/avatar/100.png" title="Benjamin Smith" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/christian46" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/christian46/avatar/100.png" title="Christian" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1389,6 +1763,11 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
+                        <a href="https://opencollective.com/guest-a52dbd35" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-a52dbd35/avatar/100.png" title="Mitch" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
                         <a href="https://opencollective.com/andrew-bailey" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/andrew-bailey/avatar/100.png" title="Andrew Bailey" class="wow fadeInUp delay-0-2s" />
                             
@@ -1399,13 +1778,13 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://opencollective.com/choonghyun" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/choonghyun/avatar/100.png" title="Choong1219" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/mayday" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/mayday/avatar/100.png" title="Mayday" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
-                        <a href="https://opencollective.com/guest-63e71a8d" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/guest-63e71a8d/avatar/100.png" title="Matthieu" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/pedro-franco" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/pedro-franco/avatar/100.png" title="Pedro Franco" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1414,8 +1793,13 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://opencollective.com/aslejo" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/aslejo/avatar/100.png" title="Aslejo" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/marco-andrade" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/marco-andrade/avatar/100.png" title="Marco Andrade" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/alfred11" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/alfred11/avatar/100.png" title="Alfred" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1444,18 +1828,8 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://opencollective.com/christian46" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/christian46/avatar/100.png" title="Christian" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                         <a href="https://opencollective.com/guest-fbefbfa3" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/guest-fbefbfa3/avatar/100.png" title="David Felix" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/guest-a52dbd35" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/guest-a52dbd35/avatar/100.png" title="Mitch" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1469,13 +1843,13 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://opencollective.com/louis17" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/louis17/ac3fe9a/avatar/100.png" title="Louis" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/andre-bonfanti" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/andre-bonfanti/d708718/avatar/100.png" title="André Bonfanti" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
-                        <a href="https://opencollective.com/andre-bonfanti" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/andre-bonfanti/d708718/avatar/100.png" title="André Bonfanti" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/harris-karim" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/harris-karim/avatar/100.png" title="Harris Karim" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1484,23 +1858,23 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://opencollective.com/nigel-lamb" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/nigel-lamb/748e0b4/avatar/100.png" title="Nigel" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                         <a href="https://opencollective.com/jordi-espada" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/jordi-espada/avatar/100.png" title="Jordi Espada" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
-                        <a href="https://opencollective.com/betz" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/betz/avatar/100.png" title="Betz" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/abdoulaye-sanni" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/abdoulaye-sanni/avatar/100.png" title="Abdoulaye Sanni" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
-                        <a href="https://opencollective.com/marco-andrade" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/marco-andrade/avatar/100.png" title="Marco Andrade" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/jean-pascal-1dac24f9" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/jean-pascal-1dac24f9/avatar/100.png" title="Jean-Pascal" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/pius" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/pius/avatar/100.png" title="Pius" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1509,28 +1883,8 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://opencollective.com/guest-4cf36329" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/guest-4cf36329/avatar/100.png" title="Valter" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                         <a href="https://opencollective.com/guest-c1d53c2f" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/guest-c1d53c2f/avatar/100.png" title="Angelo" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/mayday" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/mayday/avatar/100.png" title="Mayday" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/guest-dbadc484" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/guest-dbadc484/avatar/100.png" title="Jean-Pascal" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/pedro-franco" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/pedro-franco/avatar/100.png" title="Pedro Franco" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1549,13 +1903,18 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://opencollective.com/alfred11" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/alfred11/avatar/100.png" title="Alfred" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/guest-6dcae55a" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-6dcae55a/avatar/100.png" title="Carlos Alexandre" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
-                        <a href="https://opencollective.com/harris-karim" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/harris-karim/avatar/100.png" title="Harris Karim" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/guest-2e1964f4" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-2e1964f4/avatar/100.png" title="Balázs Révai" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/andras2" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/andras2/4963606/avatar/100.png" title="Andras" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1579,13 +1938,18 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://opencollective.com/pius" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/pius/avatar/100.png" title="Pius" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/ben-petrie" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/ben-petrie/avatar/100.png" title="Ben Petrie" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
                         <a href="https://opencollective.com/guest-e383bbfd" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/guest-e383bbfd/avatar/100.png" title="Anthony" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/rtree" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/rtree/55c4bfc/avatar/100.png" title="rtree" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1599,11 +1963,6 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://opencollective.com/ben-petrie" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/ben-petrie/avatar/100.png" title="Ben Petrie" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                         <a href="https://opencollective.com/guest-9b16b9de" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/guest-9b16b9de/avatar/100.png" title="Guest" class="wow fadeInUp delay-0-2s" />
                             
@@ -1611,11 +1970,6 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         
                         <a href="https://opencollective.com/vdl" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/vdl/avatar/100.png" title="vdl" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/guest-6dcae55a" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/guest-6dcae55a/avatar/100.png" title="Carlos Alexandre" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1679,8 +2033,18 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://opencollective.com/guest-2e1964f4" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/guest-2e1964f4/avatar/100.png" title="Balázs Révai" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/pecot" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/pecot/40e949a/avatar/100.png" title="PIERRE COTE" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/badileanu" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/badileanu/avatar/100.png" title="badileanu" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/jimikimo-94ab4112" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/jimikimo-94ab4112/avatar/100.png" title="Jimikimo" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1719,6 +2083,16 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
+                        <a href="https://opencollective.com/guest-d8528fd5" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-d8528fd5/avatar/100.png" title="Levin" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/guest-9f84ea54" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-9f84ea54/avatar/100.png" title="Wojtek" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
                         <a href="https://opencollective.com/guest-cab6f638" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/guest-cab6f638/avatar/100.png" title="Hauk-Morten" class="wow fadeInUp delay-0-2s" />
                             
@@ -1750,7 +2124,12 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         </a>
                         
                         <a href="https://opencollective.com/costantino-manes" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/costantino-manes/avatar/100.png" title="Costantino Manes" class="wow fadeInUp delay-0-2s" />
+                            <img src="https://images.opencollective.com/costantino-manes/avatar/100.png" title="CMan" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/eronlloyd" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/eronlloyd/25c56e0/avatar/100.png" title="Eron Lloyd" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1764,13 +2143,13 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://opencollective.com/andras2" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/andras2/4963606/avatar/100.png" title="Andras" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/vinicius-de-souza-lima" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/vinicius-de-souza-lima/avatar/100.png" title="Vinícius De Souza Lima" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
-                        <a href="https://opencollective.com/vinicius-de-souza-lima" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/vinicius-de-souza-lima/avatar/100.png" title="Vinícius De Souza Lima" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/enzo-albuquerque" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/enzo-albuquerque/avatar/100.png" title="Enzo Albuquerque" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1944,8 +2323,28 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://opencollective.com/rtree" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/rtree/55c4bfc/avatar/100.png" title="rtree" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/hideki1" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/hideki1/avatar/100.png" title="HIDEKI" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/keymich-otto1" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/keymich-otto1/avatar/100.png" title="Keymich Otto" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/mohammed-alsaffar" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/mohammed-alsaffar/e23e949/avatar/100.png" title="Mohammed alSaffar" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/fabian-mosquera" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/fabian-mosquera/avatar/100.png" title="Fabian Mosquera" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/kiddougi" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/kiddougi/avatar/100.png" title="KidDougi" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1959,8 +2358,8 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://opencollective.com/kevin-schnippkoweit" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/kevin-schnippkoweit/a61bc5b/avatar/100.png" title="Kevin Schnippkoweit" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/kevin-schmidt1" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/kevin-schmidt1/a61bc5b/avatar/100.png" title="Kevin Schmidt" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1979,13 +2378,8 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://opencollective.com/guest-d8528fd5" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/guest-d8528fd5/avatar/100.png" title="Levin" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/hideki1" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/hideki1/avatar/100.png" title="HIDEKI" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/archzag" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/archzag/avatar/100.png" title="archzag" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2124,18 +2518,33 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://opencollective.com/guest-9f84ea54" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/guest-9f84ea54/avatar/100.png" title="Wojtek" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                         <a href="https://opencollective.com/ihaddadene-djamel" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/ihaddadene-djamel/avatar/100.png" title="IHADDADENE DJAMEL" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
+                        <a href="https://opencollective.com/guest-c478909a" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-c478909a/avatar/100.png" title="Eduardo Isatto" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/guest-a0290345" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-a0290345/avatar/100.png" title="Guest" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/jonathan-a63688ca" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/jonathan-a63688ca/avatar/100.png" title="Jonathan" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
                         <a href="https://opencollective.com/benjamin-dahl" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/benjamin-dahl/avatar/100.png" title="Benjamin Dahl" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/guest-d504c2ac" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-d504c2ac/avatar/100.png" title="Guest" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2299,23 +2708,28 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://opencollective.com/guest-d46a9bfd" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/guest-d46a9bfd/avatar/100.png" title="Enzo Albuquerque" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                         <a href="https://opencollective.com/guest-9645236d" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/guest-9645236d/avatar/100.png" title="Guest" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
-                        <a href="https://opencollective.com/incognito-ace30921" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/incognito-ace30921/avatar/100.png" title="Anônimo" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/guest-857c3086" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-857c3086/avatar/100.png" title="Albert" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
-                        <a href="https://opencollective.com/guest-857c3086" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/guest-857c3086/avatar/100.png" title="Albert" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/guest-1be0af4d" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-1be0af4d/avatar/100.png" title="Oliver" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/nanysaur" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/nanysaur/avatar/100.png" title="NANYSAUR" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/guest-62d37947" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-62d37947/avatar/100.png" title="JUAN" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2386,11 +2800,6 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         
                         <a href="https://opencollective.com/alberto-gonzalez1" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/alberto-gonzalez1/avatar/100.png" title="Alberto Gonzalez" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/eronlloyd" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/eronlloyd/25c56e0/avatar/100.png" title="Eron Lloyd" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2469,6 +2878,11 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
+                        <a href="https://github.com/Ghesselink" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/54070862?v=4" title="Ghesselink" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
                         <a href="https://github.com/theseyan" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/30970706?v=4" title="theseyan" class="wow fadeInUp delay-0-2s" />
                             
@@ -2484,16 +2898,6 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://github.com/sboddy" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/12862430?v=4" title="sboddy" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/Ghesselink" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/54070862?v=4" title="Ghesselink" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                         <a href="https://github.com/jgunstone" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/21370980?v=4" title="jgunstone" class="wow fadeInUp delay-0-2s" />
                             
@@ -2504,18 +2908,8 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://github.com/c-mellueh" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/74136980?v=4" title="c-mellueh" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/trhyder" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/59872808?v=4" title="trhyder" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/chiragsingh1711" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/62589134?v=4" title="chiragsingh1711" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/balazsdukai" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/7190603?v=4" title="balazsdukai" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2524,8 +2918,23 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://github.com/balazsdukai" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/7190603?v=4" title="balazsdukai" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/chiragsingh1711" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/62589134?v=4" title="chiragsingh1711" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/trhyder" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/59872808?v=4" title="trhyder" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/c-mellueh" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/74136980?v=4" title="c-mellueh" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/carlopav" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/47068848?v=4" title="carlopav" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2544,11 +2953,6 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://github.com/chuncahk" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/36185113?v=4" title="chuncahk" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                         <a href="https://github.com/andersgb" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/1473004?v=4" title="andersgb" class="wow fadeInUp delay-0-2s" />
                             
@@ -2559,23 +2963,13 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
+                        <a href="https://github.com/chuncahk" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/36185113?v=4" title="chuncahk" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
                         <a href="https://github.com/Vanuan" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/361985?v=4" title="Vanuan" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/civilx64" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/26513472?v=4" title="civilx64" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/geronimi73" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/141400217?v=4" title="geronimi73" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/vinnividivicci" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/591242?v=4" title="vinnividivicci" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2584,8 +2978,23 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://github.com/manuvarkey" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/4415312?v=4" title="manuvarkey" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/vinnividivicci" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/591242?v=4" title="vinnividivicci" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/geronimi73" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/141400217?v=4" title="geronimi73" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/civilx64" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/26513472?v=4" title="civilx64" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/tpaviot" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/660130?v=4" title="tpaviot" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2594,13 +3003,13 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://github.com/christt105" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/36189169?v=4" title="christt105" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/manuvarkey" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/4415312?v=4" title="manuvarkey" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
-                        <a href="https://github.com/tpaviot" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/660130?v=4" title="tpaviot" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/christt105" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/36189169?v=4" title="christt105" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2614,13 +3023,13 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://github.com/Amoki" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/1349751?v=4" title="Amoki" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/FreakTheMighty" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/247092?v=4" title="FreakTheMighty" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
-                        <a href="https://github.com/FreakTheMighty" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/247092?v=4" title="FreakTheMighty" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/Amoki" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/1349751?v=4" title="Amoki" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2634,8 +3043,8 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://github.com/carmenfan" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/11945337?v=4" title="carmenfan" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/sennhvi" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/31751605?v=4" title="sennhvi" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2644,23 +3053,13 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://github.com/sennhvi" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/31751605?v=4" title="sennhvi" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/carmenfan" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/11945337?v=4" title="carmenfan" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
-                        <a href="https://github.com/otsoa" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/99903?v=4" title="otsoa" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/sanderboer" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/628480?v=4" title="sanderboer" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/CrazyTales" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/11017324?v=4" title="CrazyTales" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/sanzoghenzo" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/977953?v=4" title="sanzoghenzo" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2669,8 +3068,18 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://github.com/sanzoghenzo" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/977953?v=4" title="sanzoghenzo" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/CrazyTales" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/11017324?v=4" title="CrazyTales" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/sanderboer" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/628480?v=4" title="sanderboer" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/otsoa" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/99903?v=4" title="otsoa" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2709,38 +3118,18 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
+                        <a href="https://github.com/Bartok9" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/259807879?v=4" title="Bartok9" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
                         <a href="https://github.com/smr02" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/67860835?v=4" title="smr02" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
-                        <a href="https://github.com/carlopav" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/47068848?v=4" title="carlopav" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                         <a href="https://github.com/ihabelaghoury" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/46285271?v=4" title="ihabelaghoury" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/aschvalberg" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/103732817?v=4" title="aschvalberg" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/atibaut" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/2762514?v=4" title="atibaut" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/andrsbtrg" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/63083862?v=4" title="andrsbtrg" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/FabioPiccinini" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/100281972?v=4" title="FabioPiccinini" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2759,13 +3148,33 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://github.com/shmoodyyy" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/36047690?v=4" title="shmoodyyy" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/ffreality" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/10528447?v=4" title="ffreality" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
-                        <a href="https://github.com/stefkeB" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/1118880?v=4" title="stefkeB" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/FabioPiccinini" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/100281972?v=4" title="FabioPiccinini" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/aschvalberg" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/103732817?v=4" title="aschvalberg" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/atibaut" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/2762514?v=4" title="atibaut" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/andrsbtrg" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/63083862?v=4" title="andrsbtrg" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/shmoodyyy" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/36047690?v=4" title="shmoodyyy" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2784,8 +3193,8 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://github.com/gisspace" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/6889060?v=4" title="gisspace" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/stefkeB" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/1118880?v=4" title="stefkeB" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2819,6 +3228,16 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
+                        <a href="https://github.com/gisspace" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/6889060?v=4" title="gisspace" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/ssg3d" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/64012165?v=4" title="ssg3d" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
                         <a href="https://github.com/Schi11er" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/45756767?v=4" title="Schi11er" class="wow fadeInUp delay-0-2s" />
                             
@@ -2829,48 +3248,13 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://github.com/ssg3d" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/64012165?v=4" title="ssg3d" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                         <a href="https://github.com/Slackking1" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/87862818?v=4" title="Slackking1" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
-                        <a href="https://github.com/tymokvo" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/12144028?v=4" title="tymokvo" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/cjmayo" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/921089?v=4" title="cjmayo" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/mrfcoelho" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/49588804?v=4" title="mrfcoelho" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/Henri-J-Norden" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/55378880?v=4" title="Henri-J-Norden" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/csritter" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/73347739?v=4" title="csritter" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/yorikvanhavre" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/1136856?v=4" title="yorikvanhavre" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/Xsoiou" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/32762440?v=4" title="Xsoiou" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/yekose" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/8841714?v=4" title="yekose" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2879,13 +3263,58 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://github.com/DeTaku" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/113103845?v=4" title="DeTaku" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/Xsoiou" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/32762440?v=4" title="Xsoiou" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/DesertSpringsCivil" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/238900263?v=4" title="DesertSpringsCivil" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/cjmayo" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/921089?v=4" title="cjmayo" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/Henri-J-Norden" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/55378880?v=4" title="Henri-J-Norden" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/eshattow" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/12215438?v=4" title="eshattow" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/yorikvanhavre" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/1136856?v=4" title="yorikvanhavre" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/csritter" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/73347739?v=4" title="csritter" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/mrfcoelho" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/49588804?v=4" title="mrfcoelho" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
                         <a href="https://github.com/Geometrein" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/65066173?v=4" title="Geometrein" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/tiagoazvdo" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/129018227?v=4" title="tiagoazvdo" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/adrianinsaval" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/36372335?v=4" title="adrianinsaval" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2906,6 +3335,11 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         
                         <a href="https://github.com/ceegartner" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/83513981?v=4" title="ceegartner" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/apps/copilot-swe-agent" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/in/1143301?v=4" title="Copilot" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2974,11 +3408,6 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://github.com/adrianinsaval" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/36372335?v=4" title="adrianinsaval" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                         <a href="https://github.com/andy-5" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/2477826?v=4" title="andy-5" class="wow fadeInUp delay-0-2s" />
                             
@@ -3009,8 +3438,8 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://github.com/DesertSpringsCivil" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/238900263?v=4" title="DesertSpringsCivil" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/Tyzze86" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/297927911?v=4" title="Tyzze86" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -3029,43 +3458,18 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://github.com/jobermayr" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/588670?v=4" title="jobermayr" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/sztectus" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/19601475?v=4" title="sztectus" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
-                        <a href="https://github.com/Kipre" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/33923937?v=4" title="Kipre" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/DeTaku" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/113103845?v=4" title="DeTaku" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
-                        <a href="https://github.com/kurb70" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/1941141?v=4" title="kurb70" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/louistrue" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/78563314?v=4" title="louistrue" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/m-clare" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/6874646?v=4" title="m-clare" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/Michele-x98" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/45004856?v=4" title="Michele-x98" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/nelsonhp3" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/67214937?v=4" title="nelsonhp3" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/piotr-smolira" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/55686155?v=4" title="piotr-smolira" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/shoheikuni" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/39017620?v=4" title="shoheikuni" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -3074,13 +3478,43 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://github.com/sztectus" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/19601475?v=4" title="sztectus" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/ptrsmo" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/55686155?v=4" title="ptrsmo" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
-                        <a href="https://github.com/shoheikuni" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/39017620?v=4" title="shoheikuni" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/nelsonhp3" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/67214937?v=4" title="nelsonhp3" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/Michele-x98" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/45004856?v=4" title="Michele-x98" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/m-clare" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/6874646?v=4" title="m-clare" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/louistrue" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/78563314?v=4" title="louistrue" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/kurb70" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/1941141?v=4" title="kurb70" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/Kipre" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/33923937?v=4" title="Kipre" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/jobermayr" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/588670?v=4" title="jobermayr" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -3096,6 +3530,11 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         
                         <a href="https://github.com/SOCfperrier" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/34125283?v=4" title="SOCfperrier" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/vaibhav8a" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/173471846?v=4" title="vaibhav8a" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -3129,13 +3568,13 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://github.com/yilativs" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/2856078?v=4" title="yilativs" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/RobinVanTol" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/38659478?v=4" title="RobinVanTol" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
-                        <a href="https://github.com/RobinVanTol" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/38659478?v=4" title="RobinVanTol" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/RobertSigmundsson" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/230784065?v=4" title="RobertSigmundsson" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -3169,11 +3608,6 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://github.com/MGodsven" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/59841652?v=4" title="MGodsven" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                         <a href="https://github.com/MArtus-Uni" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/67042782?v=4" title="MArtus-Uni" class="wow fadeInUp delay-0-2s" />
                             
@@ -3184,8 +3618,13 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://github.com/float64co" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/942331?v=4" title="float64co" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/herlianto96" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/32268331?v=4" title="herlianto96" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/yilativs" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/2856078?v=4" title="yilativs" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -3289,11 +3728,6 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://github.com/lcpt" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/12873038?v=4" title="lcpt" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                         <a href="https://github.com/haraldg" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/1666703?v=4" title="haraldg" class="wow fadeInUp delay-0-2s" />
                             
@@ -3311,11 +3745,6 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         
                         <a href="https://github.com/eibre" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/5968613?v=4" title="eibre" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/eshattow" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/12215438?v=4" title="eshattow" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -3369,6 +3798,11 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
+                        <a href="https://github.com/BelGraDev" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/174797429?v=4" title="BelGraDev" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
                         <a href="https://github.com/autra" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/1576598?v=4" title="autra" class="wow fadeInUp delay-0-2s" />
                             
@@ -3391,6 +3825,16 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                         
                         <a href="https://github.com/AToradaIBIM" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/98612825?v=4" title="AToradaIBIM" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/float64co" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/942331?v=4" title="float64co" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/lcpt" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/12873038?v=4" title="lcpt" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -3489,11 +3933,6 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
                             
                         </a>
                         
-                        <a href="https://github.com/herlianto96" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/32268331?v=4" title="herlianto96" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                     </div>
                 </div>
                 <div class="offset-sm-2 col-sm-8 text-center  wow fadeInUp delay-0-2s">
@@ -3525,7 +3964,7 @@ $ <span class="green-color">ifcclash</span> -o results.json clashsets.json
 							<img src="assets/images/blender/logo4.jpg" alt="Partner" class="wow fadeInUp delay-0-8s"  />
 						</li>
 						<li>
-							<img src="assets/images/partner/cesium_grant_56353427842359.png" alt="Cesium ecosystem grant" style="width:128px;height:128px" />
+							<img src="assets/images/partner/cesium_grant_56353427842359.png" alt="Cesium ecosystem grant" class="wow fadeInUp delay-0-8s" style="width:128px;height:128px" />
 						</li>
 
 					</ul>
