@@ -135,7 +135,7 @@
                             <div class="banner-btn">
                                 <a href="downloads.html" class="main-btn wow fadeInUp delay-0-8s">
                                     <span class="btn-style">
-                                        <img src="assets/images/banner/download-icon.png" /> Download 0.9.0
+                                        <img src="assets/images/banner/download-icon.png" /> Download 0.9.1
                                     </span>
                                 </a>
                             </div>
@@ -276,25 +276,25 @@
             <div class="row">
                 <h3> Let's get started </h3> 
             </div>
-
             <div class="code-playground" id="code-playground">
                 <div class="cp-langbar" role="tablist" aria-label="Choose a language">
                     <button class="cp-lang active" type="button" data-lang="python">Python</button>
                     <button class="cp-lang" type="button" data-lang="cpp">C++</button>
                     <button class="cp-lang" type="button" data-lang="javascript">JavaScript</button>
+                    <button class="cp-lang" type="button" data-lang="pyodide">JavaScript (pyodide)</button>
                     <button class="cp-lang" type="button" data-lang="cli">CLI</button>
                 </div>
                 <div class="cp-examples" aria-label="Choose an example"></div>
                 <div class="cp-window">
                     <div class="cp-titlebar">
                         <span class="cp-dots"><i></i><i></i><i></i></span>
-                        <span class="cp-filename">example.py</span>
+                        <span class="cp-filename">Edit_a_wall.py</span>
                         <button class="cp-copy" type="button"><span class="cp-copy-label">Copy</span></button>
                     </div>
                     <pre class="cp-code"><code></code></pre>
                     <div class="cp-runbar">
-                        <button class="cp-run" type="button"><span class="cp-run-icon">&#9654;</span> Run</button>
-                        <span class="cp-hint">Results are simulated for illustration</span>
+                        <button class="cp-run" type="button"><span class="cp-run-icon">&#9654;</span> Show output</button>
+                        <span class="cp-hint">Captured from the runnable examples</span>
                     </div>
                     <div class="cp-console" hidden>
                         <div class="cp-console-head"><span>Output</span><button class="cp-console-close" type="button" aria-label="Close output">&times;</button></div>
@@ -344,9 +344,6 @@
 .cp-console-close{background:none;border:none;color:#69737d;font-size:22px;line-height:1;cursor:pointer;padding:0 4px;}
 .cp-console-close:hover{color:#c3ccd6;}
 .cp-console-body{margin:0;padding:2px 24px 20px;font-family:'Inconsolata',monospace;font-size:14px;line-height:1.65;color:#a7f0b5;white-space:pre-wrap;overflow-x:auto;text-align:left;min-height:20px;}
-.cp-console-body .cp-run-cmd{color:#69737d;}
-.cp-console-body .cp-run-blink::after{content:"\2588";animation:cp-blink 1s steps(2) infinite;color:#74c77b;}
-@keyframes cp-blink{0%,100%{opacity:1;}50%{opacity:0;}}
 .cp-docs{text-align:center;margin-top:28px;font-size:16px;}
 .cp-docs a span{color:#40b74c;}
 .cp-docs a:hover span{color:#f0855e;}
@@ -358,225 +355,7 @@
     var root = document.getElementById('code-playground');
     if (!root) return;
 
-    var FILES = {python:'example.py', cpp:'main.cpp', javascript:'app.mjs', cli:'bash'};
-    var RUNCMD = {python:'$ python example.py', cpp:'$ ./example', javascript:'$ node app.mjs', cli:''};
-
-    var EXAMPLES = {
-        python: [
-            { name:'Edit a wall', code:
-`import ifcopenshell
-
-# Open an IFC model from disk
-model = ifcopenshell.open("model.ifc")
-
-# Find every wall and rename the first one
-walls = model.by_type("IfcWall")
-walls[0].Name = "My wall"
-
-model.write("updated-model.ifc")
-print(f"Renamed 1 of {len(walls)} walls")`,
-              out:`Renamed 1 of 34 walls` },
-            { name:'Inspect a door', code:
-`import ifcopenshell
-import ifcopenshell.util.element
-
-model = ifcopenshell.open("model.ifc")
-door = model.by_type("IfcDoor")[0]
-
-# Pull the properties, type and storey of a door
-psets = ifcopenshell.util.element.get_psets(door)
-door_type = ifcopenshell.util.element.get_type(door)
-storey = ifcopenshell.util.element.get_container(door, ifc_class="IfcBuildingStorey")
-
-print(door_type.Name, "on", storey.Name)
-print("Fire rating:", psets["Pset_DoorCommon"]["FireRating"])`,
-              out:`DBL-1200x2100 on Level 1
-Fire rating: 60min` },
-            { name:'Author from scratch', code:
-`import ifcopenshell.api.root
-import ifcopenshell.api.unit
-import ifcopenshell.api.context
-import ifcopenshell.api.project
-import ifcopenshell.api.spatial
-import ifcopenshell.api.geometry
-import ifcopenshell.api.aggregate
-
-# Create a blank model
-model = ifcopenshell.api.project.create_file()
-
-# All projects must have one IFC Project element
-project = ifcopenshell.api.root.create_entity(model, ifc_class="IfcProject", name="My Project")
-
-# Geometry is optional in IFC, but here we want it, so let's define units
-ifcopenshell.api.unit.assign_unit(model)
-
-# Let's create a modeling geometry context, so we can store 3D geometry
-context = ifcopenshell.api.context.add_context(model, context_type="Model")
-body = ifcopenshell.api.context.add_context(model, context_type="Model",
-    context_identifier="Body", target_view="MODEL_VIEW", parent=context)
-
-# Create a site, building, and storey. Many hierarchies are possible.
-site = ifcopenshell.api.root.create_entity(model, ifc_class="IfcSite", name="My Site")
-building = ifcopenshell.api.root.create_entity(model, ifc_class="IfcBuilding", name="Building A")
-storey = ifcopenshell.api.root.create_entity(model, ifc_class="IfcBuildingStorey", name="Ground Floor")
-
-# Place the building on the site, and the storey in the building
-ifcopenshell.api.aggregate.assign_object(model, relating_object=project, products=[site])
-ifcopenshell.api.aggregate.assign_object(model, relating_object=site, products=[building])
-ifcopenshell.api.aggregate.assign_object(model, relating_object=building, products=[storey])
-
-# Create a wall with a local origin at (0, 0, 0)
-wall = ifcopenshell.api.root.create_entity(model, ifc_class="IfcWall")
-ifcopenshell.api.geometry.edit_object_placement(model, product=wall)
-
-# Add a body geometry: 5m long, 3m high, and 200mm thick
-representation = ifcopenshell.api.geometry.add_wall_representation(model, context=body, length=5, height=3, thickness=0.2)
-ifcopenshell.api.geometry.assign_representation(model, product=wall, representation=representation)
-
-# Place our wall in the ground floor, then write to a file
-ifcopenshell.api.spatial.assign_container(model, relating_structure=storey, products=[wall])
-model.write("model.ifc")`,
-              out:`Wrote model.ifc (IFC4) - 1 wall, 5.0 x 3.0 x 0.2m` }
-        ],
-        cpp: [
-            { name:'Read walls', code:
-`#include <ifcparse/Ifc4.h>
-#include <ifcparse/IfcFile.h>
-#include <iostream>
-
-int main() {
-    IfcParse::IfcFile file("model.ifc");
-
-    // Grab every IfcWall in the model
-    auto walls = file.instances_by_type<Ifc4::IfcWall>();
-    std::cout << walls->size() << " walls found\n";
-
-    for (auto wall : *walls)
-        std::cout << wall->Name().get_value_or("<unnamed>") << "\n";
-}`,
-              out:`34 walls found
-Exterior - Brick
-Interior - Partition
-Core - Concrete
-...` },
-            { name:'Extract geometry', code:
-`#include <ifcgeom/Iterator.h>
-#include <ifcparse/IfcFile.h>
-#include <iostream>
-
-int main() {
-    IfcParse::IfcFile file("model.ifc");
-    ifcopenshell::geometry::Settings settings;
-
-    // Triangulate every product and stream the meshes
-    IfcGeom::Iterator it(settings, &file);
-    if (it.initialize()) {
-        do {
-            auto* elem = it.get();
-            std::cout << elem->name() << ": "
-                      << elem->geometry().verts().size() / 3
-                      << " vertices\n";
-        } while (it.next());
-    }
-}`,
-              out:`Wall - Exterior: 8 vertices
-Window - 01: 16 vertices
-Slab - Ground: 8 vertices
-...` },
-            { name:'Author a model', code:
-`#include <ifcparse/Ifc4.h>
-#include <ifcparse/IfcHierarchyHelper.h>
-#include <fstream>
-
-int main() {
-    IfcHierarchyHelper<Ifc4> model;
-
-    // Create a wall and attach it to the spatial hierarchy
-    auto* wall = new Ifc4::IfcWall(
-        IfcParse::IfcGlobalId(), nullptr, std::string("My wall"),
-        boost::none, boost::none, nullptr, nullptr,
-        boost::none, boost::none);
-    model.addBuildingProduct(wall);
-
-    std::ofstream("model.ifc") << model;
-}`,
-              out:`Wrote model.ifc - 1 wall in schema IFC4` }
-        ],
-        javascript: [
-            { name:'In the browser', code:
-`import { loadPyodide } from "pyodide";
-
-// Boot the Python runtime and install IfcOpenShell
-const pyodide = await loadPyodide();
-await pyodide.loadPackage("ifcopenshell");
-
-// Then use IfcOpenShell exactly like you would in Python
-const names = pyodide.runPython(\`
-    import ifcopenshell
-    model = ifcopenshell.open("model.ifc")
-    [w.Name for w in model.by_type("IfcWall")]
-\`).toJs();
-
-console.log(names);`,
-              out:`[ 'Exterior - Brick', 'Interior - Partition', 'Core - Concrete' ]` },
-            { name:'Count entities', code:
-`// Tally how many of each IFC entity the model holds
-const summary = pyodide.runPython(\`
-    import ifcopenshell
-    from collections import Counter
-    model = ifcopenshell.open("model.ifc")
-    dict(Counter(e.is_a() for e in model))
-\`).toJs({ dict_converter: Object.fromEntries });
-
-console.table(summary);`,
-              out:`{ IfcWall: 34, IfcDoor: 12, IfcWindow: 21, IfcSlab: 8 }` },
-            { name:'From a file input', code:
-`// Read the .ifc a user picked into Pyodide's filesystem
-const file = document.querySelector("input[type=file]").files[0];
-const buffer = new Uint8Array(await file.arrayBuffer());
-pyodide.FS.writeFile("model.ifc", buffer);
-
-const schema = pyodide.runPython(\`
-    import ifcopenshell
-    ifcopenshell.open("model.ifc").schema
-\`);
-
-console.log("Schema:", schema);`,
-              out:`Schema: IFC4` }
-        ],
-        cli: [
-            { name:'Convert', code:
-`# Convert an IFC model to glTF for the web
-IfcConvert model.ifc model.glb
-
-# ...or to Collada, shifting the project origin
-IfcConvert --model-offset "10000;10000;0" model.ifc model.dae`,
-              out:`Reading model.ifc ...
-[####################] 100%  done in 3.2s
-Created model.glb (2.4 MB)` },
-            { name:'Validate (IDS)', code:
-`# Audit a model against an IDS specification
-ifctester specs.ids model.ifc
-
-# Produce a shareable HTML report
-ifctester specs.ids model.ifc -r Html -o report.html`,
-              out:`specs.ids
-  PASS  128 / 128 specifications
-Report written to report.html` },
-            { name:'Diff & report', code:
-`# See what changed between two revisions
-ifcdiff old.ifc new.ifc
-
-# Export a door schedule to a spreadsheet
-ifccsv -i model.ifc -o doors.csv -q "IfcDoor"
-
-# Run clash detection between two sets
-ifcclash -o results.json clashsets.json`,
-              out:`ifcdiff  : 3 added, 1 deleted, 7 changed
-ifccsv   : wrote doors.csv (12 rows)
-ifcclash : 2 clashes found` }
-        ]
-    };
+    var EXAMPLES = {"cli": [{"code": "# Convert an IFC model to glTF for the web\nIfcConvert -y model.ifc model.glb\n\n# Or to Collada, shifting the project origin\nIfcConvert -y --model-offset \"10000;10000;0\" model.ifc model.dae", "command": "$ sh Convert.sh", "file": "Convert.sh", "name": "Convert", "out": "$ IfcConvert -y model.ifc model.glb\nIfcOpenShell IfcConvert 0.9.1\nScanning file...\n\nDone scanning file   \nDone resolving references\nParsing input file took 0 seconds\nCreating geometry...\n\n[################                                  ]\n[#################################                 ]\n[##################################################]\nDone creating geometry (3 objects)                                \n\nConversion took 0 seconds\n$ IfcConvert -y --model-offset \"10000;10000;0\" model.ifc model.dae\nIfcOpenShell IfcConvert 0.9.1\nScanning file...\n\nDone scanning file   \nDone resolving references\nParsing input file took 0 seconds\nCreating geometry...\n\n[################                                  ]\n[#################################                 ]\n[##################################################]\nDone creating geometry (3 objects)                                \n\nConversion took 0 seconds"}, {"code": "# Audit a model against an IDS specification\npython -m ifctester specs.ids model.ifc --no-color\n\n# Produce a shareable HTML report\npython -m ifctester specs.ids model.ifc -r Html -o report.html", "command": "$ sh Validate_IDS.sh", "file": "Validate_IDS.sh", "name": "Validate (IDS)", "out": "$ python -m ifctester specs.ids model.ifc --no-color\nFinished loading: 0.002032041549682617\nFinished validating: 0.0004830360412597656\nDoor fire rating\n[PASS] (1/1) *Doors have a fire rating\n    Applies to:\n        All IFCDOOR data\n    Requirements:\n        FireRating data shall be 60min and in the dataset Pset_DoorCommon\n\n$ python -m ifctester specs.ids model.ifc -r Html -o report.html\nFinished loading: 0.0023927688598632812\nFinished validating: 0.0004639625549316406"}, {"code": "# See what changed between two revisions\npython -m ifcdiff model.ifc new.ifc -o diff.json\n\n# Export a door schedule to a spreadsheet\npython -m ifccsv -i model.ifc -s doors.csv --export -q \"IfcDoor\" -a Name\ncat doors.csv\n\n# Run clash detection between two sets\npython -m ifcclash -o results.json clashsets.json", "command": "$ sh Diff_and_report.sh", "file": "Diff_and_report.sh", "name": "Diff and report", "out": "$ python -m ifcdiff model.ifc new.ifc -o diff.json\n# IFC Diff\nLoading old file ...\nLoading new file ...\n# Loading finished in 0.00 seconds\n - 7 item(s) are in the old model\n - 7 item(s) are in the new model\n - 0 item(s) were added\n - 0 item(s) were deleted\n - 7 item(s) are common to both models\n - 1 item(s) had simple changes\n - 2 item(s) are queued for a detailed geometry check\n... processing old shapes ...\n... processing new shapes ...\n... comparing shapes ...\n - 1 item(s) were changed\n# Diff finished in 0.03 seconds\n$ python -m ifccsv -i model.ifc -s doors.csv --export -q \"IfcDoor\" -a Name\n$ cat doors.csv\nGlobalId,Name\n0000000000000000000002,Door - 01\n$ python -m ifcclash -o results.json clashsets.json\nCreating group a\nLoading IFC model.ifc\nLoading finished 0.002377748489379883\nCreating iterator\nIterator creation finished 0.0020570755004882812\nAdding objects a (3 elements)\nTree finished 0.01063680648803711\nElement metadata finished 4.410743713378906e-05\nFound clashes: 0"}], "cpp": [{"code": "#include \u003cifcparse/file.h\u003e\n#include \u003cifcparse/schemas/Ifc4.h\u003e\n#include \u003ciostream\u003e\n\nint main() {\n    ifcopenshell::file model(\"model.ifc\");\n    if (!model.good()) return 1;\n    auto walls = model.instances_by_type\u003cIfc4::IfcWall\u003e();\n    std::cout \u003c\u003c walls.size() \u003c\u003c \" walls found\\n\";\n    for (auto wall : walls)\n        std::cout \u003c\u003c wall.Name().value_or(\"\u003cunnamed\u003e\") \u003c\u003c \"\\n\";\n}", "command": "$ ./Read_walls", "file": "Read_walls.cpp", "name": "Read walls", "out": "3 walls found\nExterior - Brick\nInterior - Partition\nCore - Concrete"}, {"code": "#include \u003cifcparse/file.h\u003e\n#include \u003cifcparse/parse.h\u003e\n#include \u003cifcparse/schemas/Ifc4.h\u003e\n#include \u003cfstream\u003e\n#include \u003ciostream\u003e\n\nint main() {\n    ifcopenshell::file model(\"model.ifc\");\n    if (!model.good()) return 1;\n    auto walls = model.instances_by_type\u003cIfc4::IfcWall\u003e();\n    if (walls.empty()) return 1;\n    walls.front().setName(\"My wall\");\n    std::ofstream output(\"updated-model.ifc\");\n    output \u003c\u003c model;\n    if (!output) return 1;\n    std::cout \u003c\u003c \"Renamed 1 of \" \u003c\u003c walls.size() \u003c\u003c \" walls\\n\";\n}", "command": "$ ./Edit_a_wall", "file": "Edit_a_wall.cpp", "name": "Edit a wall", "out": "Renamed 1 of 3 walls"}, {"code": "ifcopenshell::geom::settings settings;\nifcopenshell::geom::converter converter(\n    ifcopenshell::geom::kernels::construct(\u0026model, \"opencascade\", settings),\n    \u0026model, settings);\n\nfor (auto wall : model.instances_by_type\u003cIfc4::IfcWall\u003e()) {\n    std::unique_ptr\u003cifcopenshell::geom::native_element\u003e brep(\n        converter.create_brep_for_representation_and_product(\n            converter.mapping()-\u003erepresentation_of(wall), wall));\n    if (!brep) return 1;\n    ifcopenshell::geom::triangulation_element mesh(*brep);\n    std::cout \u003c\u003c wall.Name().value_or(\"\u003cunnamed\u003e\") \u003c\u003c \": \"\n              \u003c\u003c mesh.geometry().verts().size() / 3 \u003c\u003c \" vertices\\n\";\n}", "command": "$ ./Extract_geometry", "file": "Extract_geometry.cpp", "name": "Extract geometry", "out": "Exterior - Brick: 8 vertices\nInterior - Partition: 8 vertices\nCore - Concrete: 8 vertices"}, {"code": "#include \u003cifcparse/file.h\u003e\n#include \u003cifcparse/global_id.h\u003e\n#include \u003cifcparse/parse.h\u003e\n#include \u003cifcparse/schemas/Ifc4.h\u003e\n#include \u003cfstream\u003e\n#include \u003ciostream\u003e\n\nint main() {\n    ifcopenshell::file model(\u0026Ifc4::get_schema());\n    auto wall = model.create\u003cIfc4::IfcWall\u003e();\n    wall.setGlobalId(ifcopenshell::global_id());\n    wall.setName(\"My wall\");\n    std::ofstream output(\"model.ifc\");\n    output \u003c\u003c model;\n    if (!output) return 1;\n    std::cout \u003c\u003c \"Wrote model.ifc - \"\n              \u003c\u003c model.instances_by_type\u003cIfc4::IfcWall\u003e().size()\n              \u003c\u003c \" wall in schema \" \u003c\u003c model.schema()-\u003ename() \u003c\u003c \"\\n\";\n}", "command": "$ ./Author_a_model", "file": "Author_a_model.cpp", "name": "Author a model", "out": "Wrote model.ifc - 1 wall in schema IFC4"}], "javascript": [{"code": "import * as ifcopenshell from \"ifcopenshell\";\nimport { readFile, writeFile } from \"node:fs/promises\";\n\nconst runtime = await ifcopenshell.init();\nawait runtime.loadPlugin(\"schema\", \"ifc4\");\n\nconst model = ifcopenshell.open(await readFile(\"model.ifc\"));\nconst walls = model.byType(\"IfcWall\");\nwalls[0].set(\"Name\", \"My wall\");\nawait writeFile(\"updated-model.ifc\", model.toString());\nconsole.log(`Renamed 1 of ${walls.length} walls`);\nmodel.destroy();", "command": "$ node Edit_a_wall.mjs", "file": "Edit_a_wall.mjs", "name": "Edit a wall", "out": "Renamed 1 of 3 walls"}, {"code": "import * as ifcopenshell from \"ifcopenshell\";\nimport { readFile } from \"node:fs/promises\";\n\nconst runtime = await ifcopenshell.init();\nawait runtime.loadPlugin(\"schema\", \"ifc4\");\n\nconst model = ifcopenshell.open(await readFile(\"model.ifc\"));\nconst walls = model.byType(\"IfcWall\");\nconsole.log(`${walls.length} walls found`);\nfor (const wall of walls) console.log(wall.get(\"Name\"));\nmodel.destroy();", "command": "$ node Read_walls.mjs", "file": "Read_walls.mjs", "name": "Read walls", "out": "3 walls found\nExterior - Brick\nInterior - Partition\nCore - Concrete"}, {"code": "import * as ifcopenshell from \"ifcopenshell\";\nimport { writeFile } from \"node:fs/promises\";\n\nconst runtime = await ifcopenshell.init();\nawait runtime.loadPlugin(\"schema\", \"ifc4\");\n\nconst model = new ifcopenshell.File(\"IFC4\");\nmodel.create(\"IfcWall\", {\n    GlobalId: \"0EI0MSHbX9gg8Fxwar7lL8\",\n    Name: \"My wall\",\n});\nawait writeFile(\"model.ifc\", model.toString());\nconsole.log(`Wrote model.ifc - ${model.byType(\"IfcWall\").length} wall in schema ${model.schema()}`);\nmodel.destroy();", "command": "$ node Author_a_model.mjs", "file": "Author_a_model.mjs", "name": "Author a model", "out": "Wrote model.ifc - 1 wall in schema IFC4"}], "pyodide": [{"code": "import { loadPyodide } from \"https://cdn.jsdelivr.net/pyodide/v0.29.5/full/pyodide.mjs\";\n\nconst pyodide = await loadPyodide();\nawait pyodide.loadPackage(\"micropip\");\nconst micropip = pyodide.pyimport(\"micropip\");\nawait micropip.install(\"wheels/ifcopenshell-0.9.1+e050d20-cp313-cp313-pyemscripten_2025_0_wasm32.whl\");\nawait micropip.install(\"wheels/ifcopenshell_parse_schema_ifc4-0.9.1+e050d20-cp313-cp313-pyemscripten_2025_0_wasm32.whl\");\nawait micropip.install(\"wheels/ifcopenshell_pure_python-0.9.1+e050d20-py3-none-any.whl\");\nconst ifcopenshell = pyodide.pyimport(\"ifcopenshell\");\n\nconst response = await fetch(\"../fixtures/model.ifc\");\nconst model = ifcopenshell.file.from_string(await response.text());\nconst walls = model.by_type(\"IfcWall\");\nwalls.get(0).Name = \"My wall\";\nmodel.write(\"updated-model.ifc\");\nconsole.log(`Renamed 1 of ${walls.length} walls`);", "command": "Open examples/pyodide/Edit_a_wall.html over HTTP", "file": "Edit_a_wall.html", "name": "Edit a wall", "out": "Renamed 1 of 3 walls"}, {"code": "import { loadPyodide } from \"https://cdn.jsdelivr.net/pyodide/v0.29.5/full/pyodide.mjs\";\n\nconst pyodide = await loadPyodide();\nawait pyodide.loadPackage(\"micropip\");\nconst micropip = pyodide.pyimport(\"micropip\");\nawait micropip.install(\"wheels/ifcopenshell-0.9.1+e050d20-cp313-cp313-pyemscripten_2025_0_wasm32.whl\");\nawait micropip.install(\"wheels/ifcopenshell_parse_schema_ifc4-0.9.1+e050d20-cp313-cp313-pyemscripten_2025_0_wasm32.whl\");\nawait micropip.install(\"wheels/ifcopenshell_pure_python-0.9.1+e050d20-py3-none-any.whl\");\nconst ifcopenshell = pyodide.pyimport(\"ifcopenshell\");\n\nconst response = await fetch(\"../fixtures/model.ifc\");\nconst model = ifcopenshell.file.from_string(await response.text());\nconst walls = model.by_type(\"IfcWall\");\nconsole.log(`${walls.length} walls found`);\nfor (const wall of walls) console.log(wall.Name);", "command": "Open examples/pyodide/Read_walls.html over HTTP", "file": "Read_walls.html", "name": "Read walls", "out": "3 walls found\nExterior - Brick\nInterior - Partition\nCore - Concrete"}, {"code": "import { loadPyodide } from \"https://cdn.jsdelivr.net/pyodide/v0.29.5/full/pyodide.mjs\";\n\nconst pyodide = await loadPyodide();\nawait pyodide.loadPackage(\"micropip\");\nconst micropip = pyodide.pyimport(\"micropip\");\nawait micropip.install(\"wheels/ifcopenshell-0.9.1+e050d20-cp313-cp313-pyemscripten_2025_0_wasm32.whl\");\nawait micropip.install(\"wheels/ifcopenshell_parse_schema_ifc4-0.9.1+e050d20-cp313-cp313-pyemscripten_2025_0_wasm32.whl\");\nawait micropip.install(\"wheels/ifcopenshell_pure_python-0.9.1+e050d20-py3-none-any.whl\");\nconst ifcopenshell = pyodide.pyimport(\"ifcopenshell\");\n\nconst element = pyodide.pyimport(\"ifcopenshell.util.element\");\nconst response = await fetch(\"../fixtures/model.ifc\");\nconst model = ifcopenshell.file.from_string(await response.text());\nconst door = model.by_type(\"IfcDoor\").get(0);\nconst psets = element.get_psets(door).toJs({dict_converter: Object.fromEntries});\nconst doorType = element.get_type(door);\nconst storey = element.get_container.callKwargs(door, {ifc_class: \"IfcBuildingStorey\"});\nconsole.log(`${doorType.Name} on ${storey.Name}`);\nconsole.log(\"Fire rating:\", psets.Pset_DoorCommon.FireRating);", "command": "Open examples/pyodide/Inspect_a_door.html over HTTP", "file": "Inspect_a_door.html", "name": "Inspect a door", "out": "DBL-1200x2100 on Level 1\nFire rating: 60min"}, {"code": "import { loadPyodide } from \"https://cdn.jsdelivr.net/pyodide/v0.29.5/full/pyodide.mjs\";\n\nconst pyodide = await loadPyodide();\nawait pyodide.loadPackage(\"micropip\");\nconst micropip = pyodide.pyimport(\"micropip\");\nawait micropip.install(\"wheels/ifcopenshell-0.9.1+e050d20-cp313-cp313-pyemscripten_2025_0_wasm32.whl\");\nawait micropip.install(\"wheels/ifcopenshell_parse_schema_ifc4-0.9.1+e050d20-cp313-cp313-pyemscripten_2025_0_wasm32.whl\");\nawait micropip.install(\"wheels/ifcopenshell_pure_python-0.9.1+e050d20-py3-none-any.whl\");\nconst ifcopenshell = pyodide.pyimport(\"ifcopenshell\");\n\nconst input = document.querySelector(\"input[type=file]\");\ninput.disabled = false;\ninput.onchange = async () =\u003e {\n    const file = input.files[0];\n    const model = ifcopenshell.file.from_string(await file.text());\n    console.log(\"Schema:\", model.schema);\n    model.destroy();\n};", "command": "Open examples/pyodide/From_a_file_input.html over HTTP", "file": "From_a_file_input.html", "name": "From a file input", "out": "Schema: IFC4"}], "python": [{"code": "import ifcopenshell\n\n# Open an IFC model from disk\nmodel = ifcopenshell.open(\"model.ifc\")\n\n# Find every wall and rename the first one\nwalls = model.by_type(\"IfcWall\")\nwalls[0].Name = \"My wall\"\n\nmodel.write(\"updated-model.ifc\")\nprint(f\"Renamed 1 of {len(walls)} walls\")", "command": "$ python Edit_a_wall.py", "file": "Edit_a_wall.py", "name": "Edit a wall", "out": "Renamed 1 of 3 walls"}, {"code": "import ifcopenshell\nimport ifcopenshell.util.element\n\nmodel = ifcopenshell.open(\"model.ifc\")\ndoor = model.by_type(\"IfcDoor\")[0]\n\n# Pull the properties, type and storey of a door\npsets = ifcopenshell.util.element.get_psets(door)\ndoor_type = ifcopenshell.util.element.get_type(door)\nstorey = ifcopenshell.util.element.get_container(door, ifc_class=\"IfcBuildingStorey\")\n\nprint(door_type.Name, \"on\", storey.Name)\nprint(\"Fire rating:\", psets[\"Pset_DoorCommon\"][\"FireRating\"])", "command": "$ python Inspect_a_door.py", "file": "Inspect_a_door.py", "name": "Inspect a door", "out": "DBL-1200x2100 on Level 1\nFire rating: 60min"}, {"code": "import ifcopenshell.api.root\nimport ifcopenshell.api.unit\nimport ifcopenshell.api.context\nimport ifcopenshell.api.project\nimport ifcopenshell.api.spatial\nimport ifcopenshell.api.geometry\nimport ifcopenshell.api.aggregate\n\n# Create a blank model\nmodel = ifcopenshell.api.project.create_file()\n\n# All projects must have one IFC Project element\nproject = ifcopenshell.api.root.create_entity(model, ifc_class=\"IfcProject\", name=\"My Project\")\n\n# Geometry is optional in IFC, but here we want it, so let\u0027s define units\nifcopenshell.api.unit.assign_unit(model)\n\n# Let\u0027s create a modeling geometry context, so we can store 3D geometry\ncontext = ifcopenshell.api.context.add_context(model, context_type=\"Model\")\nbody = ifcopenshell.api.context.add_context(model, context_type=\"Model\",\n    context_identifier=\"Body\", target_view=\"MODEL_VIEW\", parent=context)\n\n# Create a site, building, and storey. Many hierarchies are possible.\nsite = ifcopenshell.api.root.create_entity(model, ifc_class=\"IfcSite\", name=\"My Site\")\nbuilding = ifcopenshell.api.root.create_entity(model, ifc_class=\"IfcBuilding\", name=\"Building A\")\nstorey = ifcopenshell.api.root.create_entity(model, ifc_class=\"IfcBuildingStorey\", name=\"Ground Floor\")\n\n# Place the building on the site, and the storey in the building\nifcopenshell.api.aggregate.assign_object(model, relating_object=project, products=[site])\nifcopenshell.api.aggregate.assign_object(model, relating_object=site, products=[building])\nifcopenshell.api.aggregate.assign_object(model, relating_object=building, products=[storey])\n\n# Create a wall with a local origin at (0, 0, 0)\nwall = ifcopenshell.api.root.create_entity(model, ifc_class=\"IfcWall\")\nifcopenshell.api.geometry.edit_object_placement(model, product=wall)\n\n# Add a body geometry: 5m long, 3m high, and 200mm thick\nrepresentation = ifcopenshell.api.geometry.add_wall_representation(model, context=body, length=5, height=3, thickness=0.2)\nifcopenshell.api.geometry.assign_representation(model, product=wall, representation=representation)\n\n# Place our wall in the ground floor, then write to a file\nifcopenshell.api.spatial.assign_container(model, relating_structure=storey, products=[wall])\nmodel.write(\"model.ifc\")\nprint(f\"Wrote model.ifc ({model.schema}) - {len(model.by_type(\u0027IfcWall\u0027))} wall\")", "command": "$ python Author_from_scratch.py", "file": "Author_from_scratch.py", "name": "Author from scratch", "out": "Wrote model.ifc (IFC4) - 1 wall"}]};
 
     var KEYWORDS = {
         python: ['import','from','as','for','in','if','else','elif','return','def','class','with','None','True','False','and','or','not','lambda','print'],
@@ -602,6 +381,7 @@ ifcclash : 2 clashes found` }
     }
 
     function highlight(code, lang){
+        if (lang === 'pyodide') lang = 'javascript';
         var hl = HLCACHE[lang] || (HLCACHE[lang] = buildHL(lang));
         return esc(code).replace(hl.re, function(){
             for (var i = 1; i <= hl.cls.length; i++){
@@ -623,9 +403,8 @@ ifcclash : 2 clashes found` }
     var consoleBody= root.querySelector('.cp-console-body');
     var closeBtn   = root.querySelector('.cp-console-close');
     var state = { lang:'python', index:0, raw:'' };
-    var runTimer = null;
 
-    function hideConsole(){ consoleEl.hidden = true; consoleBody.textContent = ''; if (runTimer){ clearTimeout(runTimer); runTimer = null; } runBtn.disabled = false; }
+    function hideConsole(){ consoleEl.hidden = true; consoleBody.textContent = ''; }
 
     function selectExample(i){
         state.index = i;
@@ -634,7 +413,7 @@ ifcclash : 2 clashes found` }
         var ex = EXAMPLES[state.lang][i];
         state.raw = ex.code;
         codeEl.innerHTML = highlight(ex.code, state.lang);
-        fileEl.textContent = FILES[state.lang];
+        fileEl.textContent = ex.file;
         copyBtn.classList.remove('copied');
         copyLabel.textContent = 'Copy';
         hideConsole();
@@ -661,23 +440,8 @@ ifcclash : 2 clashes found` }
 
     runBtn.addEventListener('click', function(){
         var ex = EXAMPLES[state.lang][state.index];
-        var cmd = RUNCMD[state.lang];
         consoleEl.hidden = false;
-        runBtn.disabled = true;
-        consoleBody.innerHTML = (cmd ? '<span class="cp-run-cmd">' + cmd + '</span>\n' : '') + '<span class="cp-run-blink"></span>';
-        if (runTimer) clearTimeout(runTimer);
-        runTimer = setTimeout(function(){
-            consoleBody.innerHTML = '';
-            if (cmd){
-                var c = document.createElement('span');
-                c.className = 'cp-run-cmd';
-                c.textContent = cmd + '\n';
-                consoleBody.appendChild(c);
-            }
-            consoleBody.appendChild(document.createTextNode(ex.out + '\n'));
-            runBtn.disabled = false;
-            runTimer = null;
-        }, 700);
+        consoleBody.textContent = ex.command + '\n' + ex.out + '\n';
     });
 
     closeBtn.addEventListener('click', hideConsole);
@@ -710,7 +474,6 @@ ifcclash : 2 clashes found` }
     selectLang('python');
 })();
 </script>
-
             </div>
         </div>
         <!-- Carousel Section -->
@@ -979,18 +742,18 @@ ifcclash : 2 clashes found` }
                         </div>
                         
                         <div>
-                            <a href="https://opencollective.com/ppaawweeuu">
-                            <img src="https://images.opencollective.com/ppaawweeuu/159624f/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            ppaawweeuu
-                            </a>
-                        </div>
-                        
-                        <div>
                             <a href="https://opencollective.com/vyer-technologies">
                             <img src="https://images.opencollective.com/vyer-technologies/a4cebd4/logo/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
                             Vyer Technologies
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://opencollective.com/ppaawweeuu">
+                            <img src="https://images.opencollective.com/ppaawweeuu/159624f/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            ppaawweeuu
                             </a>
                         </div>
                         
@@ -1003,18 +766,18 @@ ifcclash : 2 clashes found` }
                         </div>
                         
                         <div>
-                            <a href="https://opencollective.com/guest-08b4953b">
-                            <img src="https://images.opencollective.com/guest-08b4953b/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            Alex
-                            </a>
-                        </div>
-                        
-                        <div>
                             <a href="https://opencollective.com/guest-d18f0071">
                             <img src="https://images.opencollective.com/guest-d18f0071/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
                             Víctor Bertran
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://opencollective.com/guest-08b4953b">
+                            <img src="https://images.opencollective.com/guest-08b4953b/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Alex
                             </a>
                         </div>
                         
@@ -1035,6 +798,14 @@ ifcclash : 2 clashes found` }
                         </div>
                         
                         <div>
+                            <a href="https://opencollective.com/speckle1">
+                            <img src="https://images.opencollective.com/speckle1/2722430/logo/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Speckle
+                            </a>
+                        </div>
+                        
+                        <div>
                             <a href="https://opencollective.com/jonny-knopp">
                             <img src="https://images.opencollective.com/jonny-knopp/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
@@ -1047,14 +818,6 @@ ifcclash : 2 clashes found` }
                             <img src="https://images.opencollective.com/aethereng/33ed640/logo/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
                             Aether Engineering
-                            </a>
-                        </div>
-                        
-                        <div>
-                            <a href="https://opencollective.com/haritonov-alexander">
-                            <img src="https://images.opencollective.com/haritonov-alexander/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            Haritonov Alexander
                             </a>
                         </div>
                         
@@ -1075,6 +838,14 @@ ifcclash : 2 clashes found` }
                         </div>
                         
                         <div>
+                            <a href="https://opencollective.com/haritonov-alexander">
+                            <img src="https://images.opencollective.com/haritonov-alexander/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Haritonov Alexander
+                            </a>
+                        </div>
+                        
+                        <div>
                             <a href="https://opencollective.com/tietoa-finland-oy">
                             <img src="https://images.opencollective.com/tietoa-finland-oy/c68c7e9/logo/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
@@ -1087,14 +858,6 @@ ifcclash : 2 clashes found` }
                             <img src="https://images.opencollective.com/paul-tice/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
                             Paul Tice
-                            </a>
-                        </div>
-                        
-                        <div>
-                            <a href="https://opencollective.com/speckle1">
-                            <img src="https://images.opencollective.com/speckle1/2722430/logo/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            Speckle
                             </a>
                         </div>
                         
@@ -1198,6 +961,14 @@ ifcclash : 2 clashes found` }
                         </div>
                         
                         <div>
+                            <a href="https://opencollective.com/guest-889b3da5">
+                            <img src="https://images.opencollective.com/guest-889b3da5/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Hannes
+                            </a>
+                        </div>
+                        
+                        <div>
                             <a href="https://opencollective.com/brendon-reid">
                             <img src="https://images.opencollective.com/brendon-reid/2ec9c08/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
@@ -1210,14 +981,6 @@ ifcclash : 2 clashes found` }
                             <img src="https://images.opencollective.com/dumitru-minciu/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
                             Dumitru Minciu
-                            </a>
-                        </div>
-                        
-                        <div>
-                            <a href="https://opencollective.com/guest-889b3da5">
-                            <img src="https://images.opencollective.com/guest-889b3da5/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            Hannes
                             </a>
                         </div>
                         
@@ -1318,18 +1081,18 @@ ifcclash : 2 clashes found` }
                         </div>
                         
                         <div>
-                            <a href="https://opencollective.com/kennethr">
-                            <img src="https://images.opencollective.com/kennethr/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            KennethR
-                            </a>
-                        </div>
-                        
-                        <div>
                             <a href="https://opencollective.com/bclmnt">
                             <img src="https://images.opencollective.com/bclmnt/7896105/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
                             bclmnt
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://opencollective.com/kennethr">
+                            <img src="https://images.opencollective.com/kennethr/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            KennethR
                             </a>
                         </div>
                         
@@ -1358,6 +1121,14 @@ ifcclash : 2 clashes found` }
                         </div>
                         
                         <div>
+                            <a href="https://opencollective.com/denis-pommier">
+                            <img src="https://images.opencollective.com/denis-pommier/5a3102b/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Denis Pommier
+                            </a>
+                        </div>
+                        
+                        <div>
                             <a href="https://opencollective.com/arun7">
                             <img src="https://images.opencollective.com/arun7/920fddb/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
@@ -1378,6 +1149,14 @@ ifcclash : 2 clashes found` }
                             <img src="https://images.opencollective.com/tobias-jorn/60d274c/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
                             Tobias Jörn
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://opencollective.com/nigel-lamb">
+                            <img src="https://images.opencollective.com/nigel-lamb/748e0b4/avatar/100.png" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Nigel
                             </a>
                         </div>
                         
@@ -1406,18 +1185,18 @@ ifcclash : 2 clashes found` }
                         </div>
                         
                         <div>
-                            <a href="https://github.com/brunopostle">
-                            <img src="https://avatars.githubusercontent.com/u/1747315?v=4" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            brunopostle
-                            </a>
-                        </div>
-                        
-                        <div>
                             <a href="https://github.com/RickBrice">
                             <img src="https://avatars.githubusercontent.com/u/37087370?v=4" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
                             RickBrice
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://github.com/brunopostle">
+                            <img src="https://avatars.githubusercontent.com/u/1747315?v=4" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            brunopostle
                             </a>
                         </div>
                         
@@ -1438,18 +1217,18 @@ ifcclash : 2 clashes found` }
                         </div>
                         
                         <div>
-                            <a href="https://github.com/Stinkfist0">
-                            <img src="https://avatars.githubusercontent.com/u/227876?v=4" alt="Partner" class="wow fadeInUp delay-0-2s" />
-                            <br />
-                            Stinkfist0
-                            </a>
-                        </div>
-                        
-                        <div>
                             <a href="https://github.com/BIMvoice">
                             <img src="https://avatars.githubusercontent.com/u/139251053?v=4" alt="Partner" class="wow fadeInUp delay-0-2s" />
                             <br />
                             BIMvoice
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <a href="https://github.com/Stinkfist0">
+                            <img src="https://avatars.githubusercontent.com/u/227876?v=4" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            Stinkfist0
                             </a>
                         </div>
                         
@@ -1565,13 +1344,16 @@ ifcclash : 2 clashes found` }
                             </a>
                         </div>
                         
+                        <div>
+                            <a href="https://github.com/theseyan">
+                            <img src="https://avatars.githubusercontent.com/u/30970706?v=4" alt="Partner" class="wow fadeInUp delay-0-2s" />
+                            <br />
+                            theseyan
+                            </a>
+                        </div>
+                        
                     </div>
                     <div class="partners-logo tier3">
-                        
-                        <a href="https://opencollective.com/denis-pommier" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/denis-pommier/5a3102b/avatar/100.png" title="Denis Pommier" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
                         
                         <a href="https://opencollective.com/marin-ljuban" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/marin-ljuban/avatar/100.png" title="Marin Ljuban" class="wow fadeInUp delay-0-2s" />
@@ -1593,8 +1375,8 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
-                        <a href="https://opencollective.com/nigel-lamb" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/nigel-lamb/748e0b4/avatar/100.png" title="Nigel" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/smiljan-tukic" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/smiljan-tukic/c39d7de/avatar/100.png" title="Smiljan Tukic" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1603,18 +1385,8 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
-                        <a href="https://opencollective.com/smiljan-tukic" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/smiljan-tukic/c39d7de/avatar/100.png" title="Smiljan Tukic" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                         <a href="https://opencollective.com/benny2" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/benny2/avatar/100.png" title="Benny" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/madars-siksna" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/madars-siksna/53dabdd/avatar/100.png" title="Madars Siksna" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1623,13 +1395,28 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
+                        <a href="https://opencollective.com/madars-siksna" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/madars-siksna/53dabdd/avatar/100.png" title="Madars Siksna" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
                         <a href="https://opencollective.com/abdelmalek" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/abdelmalek/avatar/100.png" title="Abdelmalek HARRAG" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
+                        <a href="https://opencollective.com/guest-5f1d018d" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-5f1d018d/avatar/100.png" title="Sam Morley" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
                         <a href="https://opencollective.com/guest-dfdf9a94" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/guest-dfdf9a94/avatar/100.png" title="Guest" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/tim-mcginley" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/tim-mcginley/avatar/100.png" title="Tim McGinley" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1643,18 +1430,8 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
-                        <a href="https://opencollective.com/guest-5f1d018d" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/guest-5f1d018d/avatar/100.png" title="Sam Morley" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                         <a href="https://opencollective.com/julio15" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/julio15/avatar/100.png" title="Julio" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/tim-mcginley" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/tim-mcginley/avatar/100.png" title="Tim McGinley" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1678,28 +1455,8 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
-                        <a href="https://opencollective.com/guest-63e71a8d" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/guest-63e71a8d/avatar/100.png" title="Matthieu" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                         <a href="https://opencollective.com/benjamin-smith3" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/benjamin-smith3/avatar/100.png" title="Benjamin Smith" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/thomas-krijnen" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/thomas-krijnen/074f916/avatar/100.png" title="Thomas Krijnen" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/guest-fb638d88" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/guest-fb638d88/avatar/100.png" title="Marcos" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/choonghyun" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/choonghyun/avatar/100.png" title="Choong1219" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1708,8 +1465,13 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
-                        <a href="https://opencollective.com/alexey-3e9bfbb0" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/alexey-3e9bfbb0/27681a2/avatar/100.png" title="ALEXEY" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/guest-63e71a8d" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-63e71a8d/avatar/100.png" title="Matthieu" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/choonghyun" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/choonghyun/avatar/100.png" title="Choong1219" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1718,8 +1480,28 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
+                        <a href="https://opencollective.com/thomas-krijnen" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/thomas-krijnen/074f916/avatar/100.png" title="Thomas Krijnen" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
                         <a href="https://opencollective.com/guest-4cf36329" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/guest-4cf36329/avatar/100.png" title="Valter" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/guest-fb638d88" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-fb638d88/avatar/100.png" title="Marcos" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/alexey-3e9bfbb0" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/alexey-3e9bfbb0/27681a2/avatar/100.png" title="ALEXEY" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/aslejo" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/aslejo/avatar/100.png" title="Aslejo" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1730,11 +1512,6 @@ ifcclash : 2 clashes found` }
                         
                         <a href="https://opencollective.com/dirkolbrich" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/dirkolbrich/95af9a7/avatar/100.png" title="Dirk Olbrich" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/aslejo" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/aslejo/avatar/100.png" title="Aslejo" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1753,6 +1530,11 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
+                        <a href="https://opencollective.com/guest-a52dbd35" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-a52dbd35/avatar/100.png" title="Mitch" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
                         <a href="https://opencollective.com/stephen-cremin" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/stephen-cremin/avatar/100.png" title="Stephen Cremin" class="wow fadeInUp delay-0-2s" />
                             
@@ -1763,8 +1545,8 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
-                        <a href="https://opencollective.com/guest-a52dbd35" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/guest-a52dbd35/avatar/100.png" title="Mitch" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/mayday" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/mayday/avatar/100.png" title="Mayday" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1775,11 +1557,6 @@ ifcclash : 2 clashes found` }
                         
                         <a href="https://opencollective.com/miguel22" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/miguel22/avatar/100.png" title="Miguel" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/mayday" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/mayday/avatar/100.png" title="Mayday" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1800,6 +1577,11 @@ ifcclash : 2 clashes found` }
                         
                         <a href="https://opencollective.com/alfred11" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/alfred11/avatar/100.png" title="Alfred" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/harris-karim" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/harris-karim/avatar/100.png" title="Harris Karim" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1848,8 +1630,8 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
-                        <a href="https://opencollective.com/harris-karim" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/harris-karim/avatar/100.png" title="Harris Karim" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/pius" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/pius/avatar/100.png" title="Pius" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1873,11 +1655,6 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
-                        <a href="https://opencollective.com/pius" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/pius/avatar/100.png" title="Pius" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                         <a href="https://opencollective.com/cordero-architecture" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/cordero-architecture/avatar/100.png" title="Cordero Architecture" class="wow fadeInUp delay-0-2s" />
                             
@@ -1885,6 +1662,16 @@ ifcclash : 2 clashes found` }
                         
                         <a href="https://opencollective.com/guest-c1d53c2f" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/guest-c1d53c2f/avatar/100.png" title="Angelo" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/guest-6dcae55a" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-6dcae55a/avatar/100.png" title="Carlos Alexandre" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/andras2" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/andras2/4963606/avatar/100.png" title="Andras" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1903,18 +1690,13 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
-                        <a href="https://opencollective.com/guest-6dcae55a" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/guest-6dcae55a/avatar/100.png" title="Carlos Alexandre" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                         <a href="https://opencollective.com/guest-2e1964f4" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/guest-2e1964f4/avatar/100.png" title="Balázs Révai" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
-                        <a href="https://opencollective.com/andras2" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/andras2/4963606/avatar/100.png" title="Andras" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/rtree" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/rtree/55c4bfc/avatar/100.png" title="rtree" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -1945,11 +1727,6 @@ ifcclash : 2 clashes found` }
                         
                         <a href="https://opencollective.com/guest-e383bbfd" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/guest-e383bbfd/avatar/100.png" title="Anthony" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/rtree" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/rtree/55c4bfc/avatar/100.png" title="rtree" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2058,6 +1835,11 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
+                        <a href="https://opencollective.com/guest-d8528fd5" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/guest-d8528fd5/avatar/100.png" title="Levin" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
                         <a href="https://opencollective.com/vukas-pajic" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/vukas-pajic/c035488/avatar/100.png" title="Vukas Pajic" class="wow fadeInUp delay-0-2s" />
                             
@@ -2080,11 +1862,6 @@ ifcclash : 2 clashes found` }
                         
                         <a href="https://opencollective.com/guest-81df0d19" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/guest-81df0d19/avatar/100.png" title="Cintia" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/guest-d8528fd5" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/guest-d8528fd5/avatar/100.png" title="Levin" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2123,13 +1900,13 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
-                        <a href="https://opencollective.com/costantino-manes" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/costantino-manes/avatar/100.png" title="CMan" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/jorn-rettweiler" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/jorn-rettweiler/1e15b91/avatar/100.png" title="Joern Rettweiler" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
-                        <a href="https://opencollective.com/eronlloyd" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/eronlloyd/25c56e0/avatar/100.png" title="Eron Lloyd" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/costantino-manes" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/costantino-manes/avatar/100.png" title="CMan" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2138,8 +1915,18 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
+                        <a href="https://opencollective.com/enzo-albuquerque" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/enzo-albuquerque/avatar/100.png" title="Enzo Albuquerque" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
                         <a href="https://opencollective.com/maxfb87" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/maxfb87/avatar/100.png" title="maxfb87" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/eronlloyd" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/eronlloyd/25c56e0/avatar/100.png" title="Eron Lloyd" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2148,8 +1935,13 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
-                        <a href="https://opencollective.com/enzo-albuquerque" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/enzo-albuquerque/avatar/100.png" title="Enzo Albuquerque" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://opencollective.com/keymich-otto1" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/keymich-otto1/avatar/100.png" title="Keymich Otto" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/mohammed-alsaffar" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/mohammed-alsaffar/e23e949/avatar/100.png" title="Mohammed alSaffar" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2328,18 +2120,13 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
-                        <a href="https://opencollective.com/keymich-otto1" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/keymich-otto1/avatar/100.png" title="Keymich Otto" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/mohammed-alsaffar" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/mohammed-alsaffar/e23e949/avatar/100.png" title="Mohammed alSaffar" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                         <a href="https://opencollective.com/fabian-mosquera" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/fabian-mosquera/avatar/100.png" title="Fabian Mosquera" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://opencollective.com/archzag" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/archzag/avatar/100.png" title="archzag" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2375,11 +2162,6 @@ ifcclash : 2 clashes found` }
                         
                         <a href="https://opencollective.com/wilton-lazary" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/wilton-lazary/e78ba75/avatar/100.png" title="WILTON" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/archzag" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/archzag/avatar/100.png" title="archzag" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2475,11 +2257,6 @@ ifcclash : 2 clashes found` }
                         
                         <a href="https://opencollective.com/guest-e3a73c71" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/guest-e3a73c71/avatar/100.png" title="k zhong" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/jorn-rettweiler" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/jorn-rettweiler/1e15b91/avatar/100.png" title="Joern Rettweiler" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2733,6 +2510,11 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
+                        <a href="https://opencollective.com/loek17" style="margin-right: 10px;">
+                            <img src="https://images.opencollective.com/loek17/avatar/100.png" title="loek17" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
                         <a href="https://opencollective.com/user-480495b3" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/user-480495b3/avatar/100.png" title="Adriano Balduino" class="wow fadeInUp delay-0-2s" />
                             
@@ -2788,16 +2570,6 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
-                        <a href="https://opencollective.com/vitor-martins" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/vitor-martins/826b0a4/avatar/100.png" title="Vitor Martins" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/roman-golev" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/roman-golev/avatar/100.png" title="Roman Golev" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                         <a href="https://opencollective.com/alberto-gonzalez1" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/alberto-gonzalez1/avatar/100.png" title="Alberto Gonzalez" class="wow fadeInUp delay-0-2s" />
                             
@@ -2810,11 +2582,6 @@ ifcclash : 2 clashes found` }
                         
                         <a href="https://opencollective.com/scott-lecher" style="margin-right: 10px;">
                             <img src="https://images.opencollective.com/scott-lecher/9633f43/avatar/100.png" title="Scott Lecher" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://opencollective.com/marites-lanuza" style="margin-right: 10px;">
-                            <img src="https://images.opencollective.com/marites-lanuza/ca2978c/avatar/100.png" title="Marites lanuza" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2883,11 +2650,6 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
-                        <a href="https://github.com/theseyan" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/30970706?v=4" title="theseyan" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                         <a href="https://github.com/BlenderDefender" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/61777131?v=4" title="BlenderDefender" class="wow fadeInUp delay-0-2s" />
                             
@@ -2898,18 +2660,13 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
-                        <a href="https://github.com/jgunstone" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/21370980?v=4" title="jgunstone" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
                         <a href="https://github.com/rbertucat" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/963014?v=4" title="rbertucat" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
-                        <a href="https://github.com/balazsdukai" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/7190603?v=4" title="balazsdukai" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/jgunstone" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/21370980?v=4" title="jgunstone" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2923,6 +2680,11 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
+                        <a href="https://github.com/balazsdukai" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/7190603?v=4" title="balazsdukai" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
                         <a href="https://github.com/trhyder" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/59872808?v=4" title="trhyder" class="wow fadeInUp delay-0-2s" />
                             
@@ -2933,13 +2695,13 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
-                        <a href="https://github.com/carlopav" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/47068848?v=4" title="carlopav" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/1744197233" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/15687827?v=4" title="1744197233" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
-                        <a href="https://github.com/1744197233" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/15687827?v=4" title="1744197233" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/carlopav" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/47068848?v=4" title="carlopav" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2953,8 +2715,8 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
-                        <a href="https://github.com/andersgb" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/1473004?v=4" title="andersgb" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/Vanuan" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/361985?v=4" title="Vanuan" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2963,18 +2725,13 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
+                        <a href="https://github.com/andersgb" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/1473004?v=4" title="andersgb" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
                         <a href="https://github.com/chuncahk" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/36185113?v=4" title="chuncahk" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/Vanuan" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/361985?v=4" title="Vanuan" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/prudhomm" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/151693?v=4" title="prudhomm" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -2985,6 +2742,11 @@ ifcclash : 2 clashes found` }
                         
                         <a href="https://github.com/geronimi73" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/141400217?v=4" title="geronimi73" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/prudhomm" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/151693?v=4" title="prudhomm" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -3313,8 +3075,8 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
-                        <a href="https://github.com/adrianinsaval" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/36372335?v=4" title="adrianinsaval" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/andy-5" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/2477826?v=4" title="andy-5" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -3408,8 +3170,8 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
-                        <a href="https://github.com/andy-5" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/2477826?v=4" title="andy-5" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/adrianinsaval" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/36372335?v=4" title="adrianinsaval" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -3518,43 +3280,8 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
-                        <a href="https://github.com/tkato2024" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/180164871?v=4" title="tkato2024" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/Ttofuuu" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/49158715?v=4" title="Ttofuuu" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/SOCfperrier" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/34125283?v=4" title="SOCfperrier" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/vaibhav8a" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/173471846?v=4" title="vaibhav8a" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/Victor-Haefner" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/9283739?v=4" title="Victor-Haefner" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/vincentqcg" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/169804787?v=4" title="vincentqcg" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/pydeoxy" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/149623594?v=4" title="pydeoxy" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/YoniChechik" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/16686924?v=4" title="YoniChechik" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/arzezniczak" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/20474251?v=4" title="arzezniczak" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -3563,8 +3290,43 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
-                        <a href="https://github.com/arzezniczak" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/20474251?v=4" title="arzezniczak" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/YoniChechik" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/16686924?v=4" title="YoniChechik" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/pydeoxy" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/149623594?v=4" title="pydeoxy" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/vincentqcg" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/169804787?v=4" title="vincentqcg" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/Victor-Haefner" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/9283739?v=4" title="Victor-Haefner" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/vaibhav8a" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/173471846?v=4" title="vaibhav8a" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/SOCfperrier" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/34125283?v=4" title="SOCfperrier" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/Ttofuuu" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/49158715?v=4" title="Ttofuuu" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/tkato2024" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/180164871?v=4" title="tkato2024" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -3618,8 +3380,8 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
-                        <a href="https://github.com/herlianto96" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/32268331?v=4" title="herlianto96" class="wow fadeInUp delay-0-2s" />
+                        <a href="https://github.com/float64co" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/942331?v=4" title="float64co" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -3793,6 +3555,11 @@ ifcclash : 2 clashes found` }
                             
                         </a>
                         
+                        <a href="https://github.com/BrandonLewis" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/286096?v=4" title="BrandonLewis" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
                         <a href="https://github.com/benjamindahl" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/2698024?v=4" title="benjamindahl" class="wow fadeInUp delay-0-2s" />
                             
@@ -3825,11 +3592,6 @@ ifcclash : 2 clashes found` }
                         
                         <a href="https://github.com/AToradaIBIM" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/98612825?v=4" title="AToradaIBIM" class="wow fadeInUp delay-0-2s" />
-                            
-                        </a>
-                        
-                        <a href="https://github.com/float64co" style="margin-right: 10px;">
-                            <img src="https://avatars.githubusercontent.com/u/942331?v=4" title="float64co" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
@@ -3930,6 +3692,11 @@ ifcclash : 2 clashes found` }
                         
                         <a href="https://github.com/HeySora" style="margin-right: 10px;">
                             <img src="https://avatars.githubusercontent.com/u/17962248?v=4" title="HeySora" class="wow fadeInUp delay-0-2s" />
+                            
+                        </a>
+                        
+                        <a href="https://github.com/herlianto96" style="margin-right: 10px;">
+                            <img src="https://avatars.githubusercontent.com/u/32268331?v=4" title="herlianto96" class="wow fadeInUp delay-0-2s" />
                             
                         </a>
                         
